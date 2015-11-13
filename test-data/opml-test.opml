@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<opml version="1.0">
+  <head>
+    <title>opml-test</title>
+    <expansionState>0,1</expansionState>
+  </head>
+  <body>
+    <outline text="Level 1" _note="this is the level 1 note">
+      <outline text="Level 2" _note="level 2 note">
+        <outline text="level 3"/>
+      </outline>
+      <outline text="level 2 again"/>
+    </outline>
+  </body>
+</opml>

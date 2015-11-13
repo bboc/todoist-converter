@@ -1,0 +1,10 @@
+TYPE,CONTENT,PRIORITY,INDENT,AUTHOR,RESPONSIBLE,DATE,DATE_LANG
+task,@errands test project task with deadline and all the other stuff,1,1,Bernhard (1846598),,in 5 days,en
+note,first comment blah blah,,,Bernhard (1846598),,,
+note,second comment,,,Bernhard (1846598),,,
+note," [[file {""file_type"":""image\/png"",""file_name"":""edit.png"",""tn_s"":[""https:\/\/d1x0mwiac2rqwt.cloudfront.net\/tn_s_2de68bc20a9e2dbf6f7c4faffbe115ec.png"",96,96],""file_url"":""https:\/\/d1x0mwiac2rqwt.cloudfront.net\/2de68bc20a9e2dbf6f7c4faffbe115ec\/as\/edit.png"",""tn_m"":[""https:\/\/d1x0mwiac2rqwt.cloudfront.net\/tn_m_2de68bc20a9e2dbf6f7c4faffbe115ec.png"",128,128],""tn_l"":[""https:\/\/d1x0mwiac2rqwt.cloudfront.net\/tn_l_2de68bc20a9e2dbf6f7c4faffbe115ec.png"",128,128],""file_size"":9999,""upload_state"":""completed""}]]",,,Bernhard (1846598),,,
+,,,,,,,
+task,test project subtask,4,2,Bernhard (1846598),,,en
+,,,,,,,
+task,test project alternate task,4,1,Bernhard (1846598),,,en
+,,,,,,,
