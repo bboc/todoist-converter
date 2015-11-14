@@ -41,22 +41,22 @@ def target_name(filename, ext):
 
 
 def convert_to_md(args):
-    img = Template('\n![$name]($url)')
+    img = Template('![$name]($url)')
 
-    print('#', title(args.file), '\n')
-
-    with open(args.file) as csvfile:
-        reader = csv.DictReader(csvfile)
-        for row in reader:
-            if row[TYPE] == 'task':
-                print('#' * (int(row[INDENT])+1), row[CONTENT], '\n')
-            elif row[TYPE] == 'note':
-                if row[CONTENT].strip().startswith(u'[[file'):
-                    j = json.loads(row[CONTENT][8:-2])
-                    print(img.substitute(name=j['file_name'], url=j['file_url']), '\n')
-                else:
-                    print(row[CONTENT], '\n')
-    print('\n')
+    with open(target_name(args.file, 'md'), 'w+') as target:
+        print('#', title(args.file), '\n', file=target)
+        with open(args.file) as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                if row[TYPE] == 'task':
+                    print('#' * (int(row[INDENT])+1), row[CONTENT], '\n', file=target)
+                elif row[TYPE] == 'note':
+                    if row[CONTENT].strip().startswith(u'[[file'):
+                        j = json.loads(row[CONTENT][8:-2])
+                        print(img.substitute(name=j['file_name'], url=j['file_url']), '\n', file=target)
+                    else:
+                        print(row[CONTENT], '\n', file=target)
+        print('\n', file=target)
 
 
 def convert_to_opml(args):
