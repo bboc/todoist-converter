@@ -1,13 +1,28 @@
-import csv
+
+from __future__ import print_function
+
 import argparse
+import csv
 
 
 def convert(args):
+    """
+    Convert file to specified format.
+    Rows: TYPE (task, note),CONTENT,PRIORITY(1-4),INDENT,AUTHOR,RESPONSIBLE,DATE,DATE_LANG
+    """
+    TYPE = 'TYPE'
+    PRIORITY = 'PRIORITY'
+    CONTENT = 'CONTENT'
+    INDENT = 'INDENT'
 
     with open(args.file) as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
-            print(row['TYPE'])
+            if row[TYPE] == 'task':
+                print('\n', '#' * int(row[INDENT]), row[CONTENT])
+            elif row[TYPE] == 'note':
+                print ('\n', row[CONTENT])
+
 
 def main():
     parser = argparse.ArgumentParser(
