@@ -13,10 +13,6 @@ INDENT = 'INDENT'
 PRIORITY = 'PRIORITY'
 TYPE = 'TYPE'
 
-"""
-TODO: strip directory from title
-TODO: make sure it's <?xml version="1.0" encoding="utf-8"?>
-"""
 
 def convert(args):
     """
@@ -29,12 +25,20 @@ def convert(args):
     else: 
         convert_to_md(args)
 
+
 def title(filename):
+    """Extract title from filename."""
     s = os.path.join(os.path.splitext(os.path.basename(filename))[0])
     if s[-4:].lower() == '.csv':
         return s[:-4]
     else:
         return s
+
+
+def target_name(filename, ext):
+    """Return target filename."""
+    return '.'.join((os.path.splitext(os.path.basename(filename))[0], ext))
+
 
 def convert_to_md(args):
     img = Template('\n![$name]($url)')
@@ -89,11 +93,7 @@ def convert_to_opml(args):
                     current.set(NOTE, new_note)
 
     tree = ET.ElementTree(opml)
-    tree.write(target_name(args.file), encoding='UTF-8', xml_declaration=True)
-
-
-def target_name(filename):
-    return '.'.join((os.path.splitext(os.path.basename(filename))[0], 'opml'))
+    tree.write(target_name(args.file, 'opml'), encoding='UTF-8', xml_declaration=True)
 
 
 def main():
