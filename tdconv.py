@@ -1,12 +1,14 @@
+# -*- coding: utf-8 -*-
 
 from __future__ import print_function
+from __future__ import unicode_literals
 
 import argparse
-from collections import defaultdict
-import csv
+import codecs
 import json
 import os.path
 from string import Template
+from unicode_csv import UnicodeReader, UnicodeWriter
 import xml.etree.cElementTree as ET
 
 
@@ -62,15 +64,22 @@ def target_name(filename, ext):
     return '.'.join((os.path.splitext(os.path.basename(filename))[0], ext))
 
 
+def row_to_dict(row):
+    return dict(zip(FIELDNAMES,row))
+
+
 def convert_csv_to_md(args):
     """Convert CSV to Markdown."""
     img = Template('![$name]($url)')
+    ttl = Template('# $title\n')
 
-    with open(target_name(args.file, 'md'), 'w+') as target:
-        print('#', title(args.file), '\n', file=target)
-        with open(args.file) as csvfile:
-            reader = csv.DictReader(csvfile)
+    with codecs.open(target_name(args.file, 'md'), 'w+', 'utf-8') as target:
+        print(ttl.substitute(title=title(args.file)), file=target)
+        with codecs.open(args.file, 'r') as csvfile:
+            reader = UnicodeReader(csvfile)
             for row in reader:
+                print('reading row', repr(row))
+                row = row_to_dict(row)
                 if row[TYPE] == TYPE_TASK:
                     print('#' * (int(row[INDENT])+1), row[CONTENT], '\n', file=target)
                 elif row[TYPE] == TYPE_NOTE:
@@ -96,9 +105,10 @@ def convert_csv_to_opml(args):
     parents = {}
     parents[0] = body
 
-    with open(args.file) as csvfile:
-        reader = csv.DictReader(csvfile)
+    with codecs.open(args.file, 'r') as csvfile:
+        reader = UnicodeReader(csvfile)
         for row in reader:
+            row = row_to_dict(row)
             if row[TYPE] == TYPE_TASK:
                 level = int(row[INDENT])
                 current = ET.SubElement(parents[level-1], 'outline', text=row[CONTENT])
@@ -125,25 +135,14 @@ def convert_opml_to_csv(args):
     tree = ET.parse(args.file)
     opml = tree.getroot()
     body = opml.find('body')
-    with open(target_name(args.file, 'csv'), 'w+') as target:
-        writer = csv.DictWriter(target, FIELDNAMES, restval='', extrasaction='raise')
-        # TODO: research and specify dialect
-
+    with codecs.open(target_name(args.file, 'csv'), 'w+') as target:
+        writer = UnicodeWriter(target, FIELDNAMES)
         def make_row(type='', content='', indent = ''):
-            return {
-                TYPE: type,
-                CONTENT: content,
-                PRIORITY: '',
-                INDENT: indent,
-                AUTHOR: '',
-                RESPONSIBLE: '',
-                DATE: '',
-                DATE_LANG: '',
-            }
+            return [type, content, '', indent, '', '', '', '']
 
         def process_element(outline, level=1):
             # content
-            row = make_row(TYPE_TASK, outline.get('text'), level)
+            row = make_row(TYPE_TASK, outline.get('text'), str(level))
             writer.writerow(row)
             # note
             note = outline.get(NOTE_ATTRIB)

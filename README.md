@@ -14,8 +14,3 @@ Clone the repository and set it up via
 
 Result will be written to the current folder.
 
-
-## TODO
-
-Identify correct CSV dialect (test with quotes)
-Write basic tests to use the test-data

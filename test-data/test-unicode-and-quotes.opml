@@ -1,0 +1,2 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<opml version="1.0"><head><title>test-unicode-and-quotes</title><expansionState>0,1</expansionState></head><body><outline _note="also, some commas, “quotes” and ⚁♨︎🃃🁅🀐 in a note" text="this is über-nice"><outline _note="⇱⤴︎↗︎⤵︎↻" text="😎🍉↗︎↴⥺" /></outline><outline text="actually, what happens to a “comma&quot;?" /></body></opml>
