@@ -136,6 +136,7 @@ def convert_opml_to_csv(args):
     body = opml.find('body')
     with codecs.open(target_name(args.file, 'csv'), 'w+') as target:
         writer = UnicodeWriter(target, FIELDNAMES)
+        writer.writerow(FIELDNAMES)
         def make_row(type='', content='', indent = ''):
             return [type, content, '', indent, '', '', '', '']
 
