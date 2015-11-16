@@ -50,35 +50,35 @@ class TodoistConverterTests(unittest.TestCase):
         args = Namespace(file=make_path('basic-test.csv'), format='md')
         convert(args)
         self.compare_results(os.path.join(self.results, 'basic-test.md'),
-                             make_path('basic-test.md'))
+                             make_path('basic-result.md'))
 
     def test_basic_conversion_to_opml(self):
         args = Namespace(file=make_path('basic-test.csv'), format='opml')
         convert(args)
         self.compare_results(os.path.join(self.results, 'basic-test.opml'),
-                             make_path('basic-test.opml'))
+                             make_path('basic-result.opml'))
 
     def test_basic_conversion_to_csv(self):
-        args = Namespace(file=make_path('opml-test.opml'), format='todoist')
+        args = Namespace(file=make_path('basic-opml-test.opml'), format='todoist')
         convert(args)
-        self.compare_results(os.path.join(self.results, 'opml-test.csv'),
-                             make_path('opml-test-roundtrip.csv'))
+        self.compare_results(os.path.join(self.results, 'basic-opml-test.csv'),
+                             make_path('basic-opml-result.csv'))
 
 
     def test_unicode_conversion_to_md(self):
-        args = Namespace(file=make_path('test-unicode-and-quotes.csv'), format='md')
+        args = Namespace(file=make_path('unicode-and-quotes-test.csv'), format='md')
         convert(args)
-        self.compare_results(os.path.join(self.results, 'test-unicode-and-quotes.md'),
-                             make_path('test-unicode-and-quotes.md'))
+        self.compare_results(os.path.join(self.results, 'unicode-and-quotes-test.md'),
+                             make_path('unicode-and-quotes-result.md'))
     
     def test_unicode_conversion_to_opml(self):
-        args = Namespace(file=make_path('test-unicode-and-quotes.csv'), format='opml')
+        args = Namespace(file=make_path('unicode-and-quotes-test.csv'), format='opml')
         convert(args)
-        self.compare_results(os.path.join(self.results, 'test-unicode-and-quotes.opml'),
-                             make_path('test-unicode-and-quotes.opml'))
+        self.compare_results(os.path.join(self.results, 'unicode-and-quotes-test.opml'),
+                             make_path('unicode-and-quotes-result.opml'))
 
     def test_unicode_conversion_to_csv(self):
-        args = Namespace(file=make_path('opml-unicode-test.opml'), format='todoist')
+        args = Namespace(file=make_path('unicode-opml-test.opml'), format='todoist')
         convert(args)
-        self.compare_results(os.path.join(self.results, 'opml-unicode-test.csv'),
-                             make_path('opml-unicode-result.csv'))
+        self.compare_results(os.path.join(self.results, 'unicode-opml-test.csv'),
+                             make_path('unicode-opml-result.csv'))
