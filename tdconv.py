@@ -78,7 +78,6 @@ def convert_csv_to_md(args):
         with codecs.open(args.file, 'r') as csvfile:
             reader = UnicodeReader(csvfile)
             for row in reader:
-                print('reading row', repr(row))
                 row = row_to_dict(row)
                 if row[TYPE] == TYPE_TASK:
                     print('#' * (int(row[INDENT])+1), row[CONTENT], '\n', file=target)
