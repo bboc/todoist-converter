@@ -1,5 +1,7 @@
 # todoist-converter
+
 Converter for Todoist CSV templates to Markdown, and OPML, and back from OPML to Todoist CSV.
+
 
 ## Setup
 
@@ -13,4 +15,9 @@ Clone the repository and set it up via
 `tdconv <source file name> --format <md|opml|todoist>`
 
 Result will be written to the current folder.
+
+
+## Notes
+
+Import of generated CSV tested with Todoist on OS-X version 715.
 
