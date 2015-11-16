@@ -10,7 +10,6 @@ from string import Template
 import xml.etree.cElementTree as ET
 
 
-
 # Todoist csv fields
 TYPE = 'TYPE'
 CONTENT = 'CONTENT'
@@ -20,7 +19,6 @@ AUTHOR = 'AUTHOR'
 RESPONSIBLE = 'RESPONSIBLE'
 DATE = 'DATE'
 DATE_LANG = 'DATE_LANG'
-
 
 # (ordered) list of fieldnames for Todoist CSV
 FIELDNAMES = TYPE,CONTENT,PRIORITY,INDENT,AUTHOR,RESPONSIBLE,DATE,DATE_LANG
@@ -32,7 +30,7 @@ FORMAT_MD = 'md'
 FORMAT_OPML = 'opml'
 FORMAT_CSV = 'todoist'
 
-
+# OPML attribute for note
 NOTE_ATTRIB = '_note'
 
 
