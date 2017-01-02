@@ -37,8 +37,8 @@ FORMAT_TASKPAPER = 'taskpaper'
 # OPML attribute for note
 NOTE_ATTRIB = '_note'
 
+# pattern for attachments in notes
 NOTE = re.compile("(?P<text>.*?)\[\[file(?P<attachment>.*?)\]\]")
-
 
 
 def convert(args):
@@ -77,7 +77,7 @@ def row_to_dict(row):
 
 def convert_csv_to_md(args):
     """Convert CSV to Markdown."""
-    img = Template('![$name]($url)')
+    att = Template('[$name]($url)')
     ttl = Template('# $title\n')
 
     with codecs.open(target_name(args.file, 'md'), 'w+', 'utf-8') as target:
@@ -89,11 +89,11 @@ def convert_csv_to_md(args):
                 if row[TYPE] == TYPE_TASK:
                     print('#' * (int(row[INDENT])+1), row[CONTENT], '\n', file=target)
                 elif row[TYPE] == TYPE_NOTE:
-                    if row[CONTENT].strip().startswith(u'[[file'):
-                        j = json.loads(row[CONTENT][8:-2])
-                        print(img.substitute(name=j['file_name'], url=j['file_url']), '\n', file=target)
-                    else:
-                        print(row[CONTENT], '\n', file=target)
+                    text, attachment = process_note(row[CONTENT])
+                    if text:
+                        print(text, '\n', file=target)
+                    if attachment:
+                        print(att.substitute(name=attachment['name'], url=attachment['url']), '\n', file=target)
         print('\n', file=target)
 
 
