@@ -7,7 +7,7 @@ setup(
 
     entry_points = {
         'console_scripts': [
-            'tdconv = tdconv:main',
+            'tdconv = tdconv.dconv:main',
         ],
     }
 

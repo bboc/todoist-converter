@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import filecmp
-from tdconv import convert
+from tdconv.tdconv import convert
 import os
 import shutil
 import sys
