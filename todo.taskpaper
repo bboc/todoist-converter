@@ -5,7 +5,8 @@ tdconv:
     - Create a formula for homebrew, see for explanation http://jimkubicek.com/blog/2015/02/14/creating-a-homebrew-formula-for-a-python-project/
   code layout:
     - create python package tdconv @done
-    - split code into common, taskpaper, opml, csv and commandline code
-    - refactor oop code
+    - split code into common, taskpaper, converters and commandline code @done
+    - refactor taskpaper converter and processing of notes/attachments to oop code 
+    - use namedtuple instead of dict for csv rows
   features:
     - make download of attachments optional for all file types
