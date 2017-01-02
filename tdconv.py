@@ -10,6 +10,7 @@ import os.path
 import re
 from string import Template
 from unicode_csv import UnicodeReader, UnicodeWriter
+import urllib2
 import xml.etree.cElementTree as ET
 
 
@@ -39,6 +40,8 @@ NOTE_ATTRIB = '_note'
 
 # pattern for attachments in notes
 NOTE = re.compile("(?P<text>.*?)\[\[file(?P<attachment>.*?)\]\]")
+
+ATTACHMENTS_DIR = 'attachments'
 
 
 def convert(args):
@@ -76,15 +79,45 @@ def row_to_dict(row):
     return dict(zip(FIELDNAMES,row))
 
 def process_note(content):
-    """Extract note text and attachment (if present)."""
+    """Extract note text and attachment (if present), download attachment to folder attachments."""
+
+    def create_dir(dirname):
+        """Create directory if it dies not exist, if it exists make sure it's a directory and not a file."""
+        if os.path.exists(dirname):
+            if os.path.isfile(dirname):
+                raise Exception(dirname, 'already exist as a file')
+            return
+        os.mkdir(dirname)
+
+    def download_file(url, filename):
+        """Download a URL to filename."""
+        f = urllib2.urlopen(url)
+        with open(filename, "wb") as target:
+            target.write(f.read())        
+
+    def find_filename(dirname, filename):
+        """Indentify (and return) a filename for the attachment: if filename is taken,
+        try <filename>(n>1).<ext> until file can be downloaded."""
+        full_filename = os.path.join(dirname, filename)
+        root, ext = os.path.splitext(filename)
+        index = 1
+        tpl = Template("$root($index)$ext")
+        while os.path.exists(full_filename):
+            index += 1 
+            full_filename = os.path.join(dirname,tpl.substitute(root=root, index=index, ext=ext))
+        return full_filename
+
 
     match = NOTE.match(content)
     if match:
+        ##create_dir(ATTACHMENTS_DIR)
         j = json.loads(match.group('attachment'))
+        ## relpath = find_filename(ATTACHMENTS_DIR, j['file_name'])
+        ## download_file(j['file_url'], relpath)
         return (match.group('text').strip(), # content
-            dict(name=j['file_name'], url=j['file_url']))
+                dict(name=j['file_name'], url=j['file_url']))
     else:
-        return  (content, None)
+        return (content, None)
 
 
 def convert_csv_to_md(args):
@@ -189,7 +222,6 @@ def task_to_tp(row, target):
     # add @due(date):
     if row[DATE]:
         content = ''.join((content, ' @due(%s)' % row[DATE]))
-    
     # clean tags
     content = content.replace('@/', '@')
     print(tpl.substitute(indent = '\t' * (int(row[INDENT])), content=content), file=target)
@@ -203,7 +235,13 @@ def note_to_tp(row, target, indent):
             print(TP_NOTE.substitute(indent=tabs, content=line), file=target)
     if attachment:
         content = ': '.join((attachment['name'], attachment['url']))
+        ## content = tp_file(attachment['url'])
         print(TP_NOTE.substitute(indent=tabs, content=content), file=target)
+
+
+def tp_file(relpath):
+    """Make relative TaskPaper file reference: prefix with ./ and escape spaces."""
+    return ''.join(('./', relpath.replace(' ', '\ ')))
 
 
 def convert_opml_to_csv(args):
