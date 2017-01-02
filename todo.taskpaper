@@ -6,8 +6,10 @@ tdconv:
   code layout:
     - create python package tdconv @done
     - split code into common, taskpaper, converters and commandline code @done
-    - refactor taskpaper converter to oop code 
+    - refactor taskpaper converter to oop code @done
     - refactor processing of notes/attachments to oop code @done
     - use namedtuple instead of dict for csv rows
+
+
   features:
     - make download of attachments optional for all file types

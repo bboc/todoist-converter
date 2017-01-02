@@ -12,23 +12,31 @@ import urllib2
 from const import AUTHOR, CONTENT, DATE, DATE_LANG, INDENT, PRIORITY, RESPONSIBLE, TYPE, FIELDNAMES
 	
 
-def title(filename):
-    """Extract title from filename."""
-    s = os.path.join(os.path.splitext(os.path.basename(filename))[0])
-    if s[-4:].lower() == '.csv':
-        return s[:-4]
-    else:
-        return s
+class Converter(object):
 
-def target_name(filename, ext):
-    """Return target filename."""
-    try:
-        return '.'.join((os.path.splitext(os.path.basename(filename))[0], ext))
-    except UnicodeDecodeError:
-        raise Exception("can't process filename", filename, ext)
+    def __init__(self, args):
+        self.args = args
+    
+    @staticmethod
+    def title(filename):
+        """Extract title from filename."""
+        s = os.path.join(os.path.splitext(os.path.basename(filename))[0])
+        if s[-4:].lower() == '.csv':
+            return s[:-4]
+        else:
+            return s
 
-def row_to_dict(row):
-    return dict(zip(FIELDNAMES,row))
+    @staticmethod
+    def target_name(filename, ext):
+        """Return target filename."""
+        try:
+            return '.'.join((os.path.splitext(os.path.basename(filename))[0], ext))
+        except UnicodeDecodeError:
+            raise Exception("can't process filename", filename, ext)
+
+    @staticmethod
+    def row_to_dict(row):
+        return dict(zip(FIELDNAMES,row))
 
 
 class Note(object):
