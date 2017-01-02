@@ -111,6 +111,15 @@ def convert_csv_to_opml(args):
     parents = {}
     parents[0] = body
 
+    def opml_append_note(current, contents):
+        note = current.get(NOTE_ATTRIB)
+        if note: 
+            current.set(NOTE_ATTRIB, '\n\n'.join((note, contents)))
+        else:
+            current.set(NOTE_ATTRIB, contents)
+
+
+
     with codecs.open(args.file, 'r') as csvfile:
         reader = UnicodeReader(csvfile)
         for row in reader:
@@ -120,16 +129,11 @@ def convert_csv_to_opml(args):
                 current = ET.SubElement(parents[level-1], 'outline', text=row[CONTENT])
                 parents[level] = current
             elif row[TYPE] == TYPE_NOTE:
-                if row[CONTENT].strip().startswith(u'[[file'):
-                    j = json.loads(row[CONTENT][8:-2])
-                    new_note = img.substitute(name=j['file_name'], url=j['file_url'])
-                else:
-                    new_note = row[CONTENT]
-                note = current.get(NOTE_ATTRIB)
-                if note: 
-                    current.set(NOTE_ATTRIB, '\n\n'.join((note, new_note)))
-                else:
-                    current.set(NOTE_ATTRIB, new_note)
+                text, attachment = process_note(row[CONTENT])
+                if attachment: 
+                    opml_append_note(current, img.substitute(name=attachment['name'], url=attachment['url']))
+                if text:
+                    opml_append_note(current, text)
 
     tree = ET.ElementTree(opml)
     tree.write(target_name(args.file, 'opml'), encoding='UTF-8', xml_declaration=True)
@@ -142,16 +146,13 @@ TP_NOTE = Template('$indent$content')
 
 
 def convert_csv_to_taskpaper(args):
-    """Convert todoist project file to TaskPaper.
-
-    - add file name as top level project, indent everything below that @done
-    """
-    img = Template('![$name]($url)')
-    ttl = Template('$title:\n')
+    """Convert todoist project file to TaskPaper."""
+    project = Template('$title:\n')
     indent = 1
 
     with codecs.open(target_name(args.file, 'taskpaper'), 'w+', 'utf-8') as target:
-        print(ttl.substitute(title=title(args.file)), file=target)
+        # Add file name as top level project (all tasks belong to that project)
+        print(project.substitute(title=title(args.file)), file=target)
         with codecs.open(args.file, 'r') as csvfile:
             reader = UnicodeReader(csvfile)
             for row in reader:
@@ -166,23 +167,19 @@ def convert_csv_to_taskpaper(args):
 
 
 def task_to_tp(row, target):
-    """Convert one task to TaskPaper.
-    - INDENT * \tab @done
-    - if line startswith '* ': make it a project @done
-    - if PRIORIRY < 4: @priority(PRIORITY)
-    - if DATE: @due(DATE) might or might not work
-    """
+    """Convert one task to TaskPaper."""
     content = row[CONTENT]
+    # treat all 'unclickable' (sub-)tasks as projects
     if content.startswith('* '):
         tpl = TP_PROJECT
         content = content[2:]
     else:
         tpl = TP_TASK
 
-    # add priority tag:
+    # add priority tag for prio 1-3:
     if int(row[PRIORITY]) < 4: 
         content = ''.join((content, ' @priority(%s)' % row[PRIORITY]))
-    # add due date:
+    # add @due(date):
     if row[DATE]:
         content = ''.join((content, ' @due(%s)' % row[DATE]))
     
@@ -192,12 +189,9 @@ def task_to_tp(row, target):
 
 
 def note_to_tp(row, target, indent):
-    """Convert one note to TaskPaper.
-
-    - notes are indented more than the tasks they belong to @done
-    """
+    """Convert one note to TaskPaper."""
     text, attachment = process_note(row[CONTENT])
-    tabs = '\t' * (indent + 1)
+    tabs = '\t' * (indent + 1) # notes need an additional level of indentation
     if text:
         for line in text.split('\n'):
             print(TP_NOTE.substitute(indent=tabs, content=line), file=target)
