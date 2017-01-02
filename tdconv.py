@@ -65,7 +65,6 @@ def title(filename):
     else:
         return s
 
-
 def target_name(filename, ext):
     """Return target filename."""
     try:
@@ -75,6 +74,17 @@ def target_name(filename, ext):
 
 def row_to_dict(row):
     return dict(zip(FIELDNAMES,row))
+
+def process_note(content):
+    """Extract note text and attachment (if present)."""
+
+    match = NOTE.match(content)
+    if match:
+        j = json.loads(match.group('attachment'))
+        return (match.group('text').strip(), # content
+            dict(name=j['file_name'], url=j['file_url']))
+    else:
+        return  (content, None)
 
 
 def convert_csv_to_md(args):
@@ -120,8 +130,6 @@ def convert_csv_to_opml(args):
         else:
             current.set(NOTE_ATTRIB, contents)
 
-
-
     with codecs.open(args.file, 'r') as csvfile:
         reader = UnicodeReader(csvfile)
         for row in reader:
@@ -145,8 +153,6 @@ TP_TASK = Template('$indent- $content')
 TP_PROJECT = Template('$indent$content:')
 TP_NOTE = Template('$indent$content')
 
-
-
 def convert_csv_to_taskpaper(args):
     """Convert todoist project file to TaskPaper."""
     project = Template('$title:\n')
@@ -166,7 +172,6 @@ def convert_csv_to_taskpaper(args):
                     note_to_tp(row, target, indent)
 
         print('\n', file=target)
-
 
 def task_to_tp(row, target):
     """Convert one task to TaskPaper."""
@@ -189,7 +194,6 @@ def task_to_tp(row, target):
     content = content.replace('@/', '@')
     print(tpl.substitute(indent = '\t' * (int(row[INDENT])), content=content), file=target)
 
-
 def note_to_tp(row, target, indent):
     """Convert one note to TaskPaper."""
     text, attachment = process_note(row[CONTENT])
@@ -200,18 +204,6 @@ def note_to_tp(row, target, indent):
     if attachment:
         content = ': '.join((attachment['name'], attachment['url']))
         print(TP_NOTE.substitute(indent=tabs, content=content), file=target)
-
-
-def process_note(content):
-    """Extract note text and attachment (if present)."""
-
-    match = NOTE.match(content)
-    if match:
-        j = json.loads(match.group('attachment'))
-        return (match.group('text').strip(), # content
-            dict(name=j['file_name'], url=j['file_url']))
-    else:
-        return  (content, None)
 
 
 def convert_opml_to_csv(args):
