@@ -155,12 +155,12 @@ TP_NOTE = Template('$indent$content')
 
 def convert_csv_to_taskpaper(args):
     """Convert todoist project file to TaskPaper."""
-    project = Template('$title:\n')
+    TP_PROJECT = Template('$title:')
     indent = 1
 
     with codecs.open(target_name(args.file, 'taskpaper'), 'w+', 'utf-8') as target:
         # Add file name as top level project (all tasks belong to that project)
-        print(project.substitute(title=title(args.file)), file=target)
+        print(TP_PROJECT.substitute(title=title(args.file)), file=target)
         with codecs.open(args.file, 'r') as csvfile:
             reader = UnicodeReader(csvfile)
             for row in reader:

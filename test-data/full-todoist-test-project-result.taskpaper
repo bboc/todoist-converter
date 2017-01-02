@@ -1,5 +1,4 @@
 full-todoist-test-project:
-
 	unclickable task:
 		- clickable subtask, scheduled @30min @munich @priority(2) @due(4 Jan)
 		- another subtask with a note
