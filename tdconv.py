@@ -7,6 +7,7 @@ import argparse
 import codecs
 import json
 import os.path
+import re
 from string import Template
 from unicode_csv import UnicodeReader, UnicodeWriter
 import xml.etree.cElementTree as ET
@@ -31,9 +32,13 @@ TYPE_NOTE = 'note'
 FORMAT_MD = 'md'
 FORMAT_OPML = 'opml'
 FORMAT_CSV = 'todoist'
+FORMAT_TASKPAPER = 'taskpaper'
 
 # OPML attribute for note
 NOTE_ATTRIB = '_note'
+
+NOTE = re.compile("(?P<text>.*?)\[\[file(?P<attachment>.*?)\]\]")
+
 
 
 def convert(args):
@@ -46,6 +51,8 @@ def convert(args):
         convert_csv_to_opml(args)
     elif args.format.lower() == FORMAT_CSV:
         convert_opml_to_csv(args)
+    elif args.format.lower() == FORMAT_TASKPAPER:
+        convert_csv_to_taskpaper(args)
     else: 
         convert_csv_to_md(args)
 
@@ -126,6 +133,89 @@ def convert_csv_to_opml(args):
 
     tree = ET.ElementTree(opml)
     tree.write(target_name(args.file, 'opml'), encoding='UTF-8', xml_declaration=True)
+
+
+TP_TASK = Template('$indent- $content')
+TP_PROJECT = Template('$indent$content:')
+TP_NOTE = Template('$indent$content')
+
+
+
+def convert_csv_to_taskpaper(args):
+    """Convert todoist project file to TaskPaper.
+
+    - add file name as top level project, indent everything below that @done
+    """
+    img = Template('![$name]($url)')
+    ttl = Template('$title:\n')
+    indent = 1
+
+    with codecs.open(target_name(args.file, 'taskpaper'), 'w+', 'utf-8') as target:
+        print(ttl.substitute(title=title(args.file)), file=target)
+        with codecs.open(args.file, 'r') as csvfile:
+            reader = UnicodeReader(csvfile)
+            for row in reader:
+                row = row_to_dict(row)
+                if row[TYPE] == TYPE_TASK:
+                    indent = int(row[INDENT])
+                    task_to_tp(row, target)
+                elif row[TYPE] == TYPE_NOTE:
+                    note_to_tp(row, target, indent)
+
+        print('\n', file=target)
+
+
+def task_to_tp(row, target):
+    """Convert one task to TaskPaper.
+    - INDENT * \tab @done
+    - if line startswith '* ': make it a project @done
+    - if PRIORIRY < 4: @priority(PRIORITY)
+    - if DATE: @due(DATE) might or might not work
+    """
+    content = row[CONTENT]
+    if content.startswith('* '):
+        tpl = TP_PROJECT
+        content = content[2:]
+    else:
+        tpl = TP_TASK
+
+    # add priority tag:
+    if int(row[PRIORITY]) < 4: 
+        content = ''.join((content, ' @priority(%s)' % row[PRIORITY]))
+    # add due date:
+    if row[DATE]:
+        content = ''.join((content, ' @due(%s)' % row[DATE]))
+    
+    # clean tags
+    content = content.replace('@/', '@')
+    print(tpl.substitute(indent = '\t' * (int(row[INDENT])), content=content), file=target)
+
+
+def note_to_tp(row, target, indent):
+    """Convert one note to TaskPaper.
+
+    - notes are indented more than the tasks they belong to @done
+    """
+    text, attachment = process_note(row[CONTENT])
+    tabs = '\t' * (indent + 1)
+    if text:
+        for line in text.split('\n'):
+            print(TP_NOTE.substitute(indent=tabs, content=line), file=target)
+    if attachment:
+        content = ': '.join((attachment['name'], attachment['url']))
+        print(TP_NOTE.substitute(indent=tabs, content=content), file=target)
+
+
+def process_note(content):
+    """Extract note text and attachment (if present)."""
+
+    match = NOTE.match(content)
+    if match:
+        j = json.loads(match.group('attachment'))
+        return (match.group('text').strip(), # content
+            dict(name=j['file_name'], url=j['file_url']))
+    else:
+        return  (content, None)
 
 
 def convert_opml_to_csv(args):
