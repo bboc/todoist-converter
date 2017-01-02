@@ -68,8 +68,10 @@ def title(filename):
 
 def target_name(filename, ext):
     """Return target filename."""
-    return '.'.join((os.path.splitext(os.path.basename(filename))[0], ext))
-
+    try:
+        return '.'.join((os.path.splitext(os.path.basename(filename))[0], ext))
+    except UnicodeDecodeError:
+        raise Exception("can't process filename", filename, ext)
 
 def row_to_dict(row):
     return dict(zip(FIELDNAMES,row))
