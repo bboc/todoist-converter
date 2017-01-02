@@ -10,21 +10,10 @@ from unicode_csv import UnicodeReader, UnicodeWriter
 import xml.etree.cElementTree as ET
 
 from common import Converter, Note
-from const import AUTHOR, CONTENT, DATE, DATE_LANG, INDENT, PRIORITY, RESPONSIBLE, TYPE, FIELDNAMES
-from const import TYPE_TASK, TYPE_NOTE
-
-
-# OPML attribute for note
-NOTE_ATTRIB = '_note'
-
-
-def convert_csv_to_md(args):
-    """Convert CSV to Markdown."""
-    c = CsvToMarkdownConverter(args)
-    c.convert()
-
+from const import FIELDNAMES
 
 class CsvToMarkdownConverter(Converter):
+    """Convert CSV to Markdown."""
 
     def __init__(self, args):
         super(CsvToMarkdownConverter, self).__init__(args)
@@ -38,9 +27,9 @@ class CsvToMarkdownConverter(Converter):
             with codecs.open(self.args.file, 'r') as csvfile:
 
                 for row in map(self.Row._make, UnicodeReader(csvfile)):
-                    if row.type == TYPE_TASK:
+                    if row.type == self.TYPE_TASK:
                         print('#' * (int(row.indent)+1), row.content, '\n', file=target)
-                    elif row.type == TYPE_NOTE:
+                    elif row.type == self.TYPE_NOTE:
                         note = Note((row.content))
                         if note.text:
                             print(note.text, '\n', file=target)
@@ -49,22 +38,13 @@ class CsvToMarkdownConverter(Converter):
             print('\n', file=target)
 
 
-
-
-def convert_csv_to_opml(args):
-    """Convert Todoist CSV to OPML."""
-    c = CsvToOpmlConverter(args)
-    c.convert()
-
-
 class CsvToOpmlConverter(Converter):
+    """Convert Todoist CSV to OPML."""
 
     def __init__(self, args):
         super(CsvToOpmlConverter, self).__init__(args)
 
     def convert(self):
-
-
         img = Template('Image "$name": $url')
 
         opml = ET.Element("opml", version='1.0')
@@ -77,20 +57,19 @@ class CsvToOpmlConverter(Converter):
         parents[0] = body
 
         def opml_append_note(current, contents):
-            note = current.get(NOTE_ATTRIB)
+            note = current.get(self.NOTE_ATTRIB)
             if note: 
-                current.set(NOTE_ATTRIB, '\n\n'.join((note, contents)))
+                current.set(self.NOTE_ATTRIB, '\n\n'.join((note, contents)))
             else:
-                current.set(NOTE_ATTRIB, contents)
+                current.set(self.NOTE_ATTRIB, contents)
 
         with codecs.open(self.args.file, 'r') as csvfile:
-
             for row in map(self.Row._make, UnicodeReader(csvfile)):
-                if row.type == TYPE_TASK:
+                if row.type == self.TYPE_TASK:
                     level = int(row.indent)
                     current = ET.SubElement(parents[level-1], 'outline', text=row.content)
                     parents[level] = current
-                elif row.type == TYPE_NOTE:
+                elif row.type == self.TYPE_NOTE:
                     note = Note(row.content)
                     if note.attachment: 
                         opml_append_note(current, img.substitute(name=note.attachment.name, url=note.attachment.url))
@@ -101,13 +80,9 @@ class CsvToOpmlConverter(Converter):
         tree.write(self.target_name(self.args.file, 'opml'), encoding='UTF-8', xml_declaration=True)
 
 
-def convert_opml_to_csv(args):
-    """Convert OPML file to Todoist CSV."""
-    c = OpmlToCsvConverter(args)
-    c.convert()
-
 
 class OpmlToCsvConverter(Converter):
+    """Convert OPML file to Todoist CSV."""
 
     def __init__(self, args):
         super(OpmlToCsvConverter, self).__init__(args)
@@ -128,12 +103,12 @@ class OpmlToCsvConverter(Converter):
 
     def process_element(self, outline, level=1):
         # content
-        row = self.make_row(TYPE_TASK, outline.get('text'), str(level))
+        row = self.make_row(self.TYPE_TASK, outline.get('text'), str(level))
         self.writer.writerow(row)
         # note
-        note = outline.get(NOTE_ATTRIB)
+        note = outline.get(self.NOTE_ATTRIB)
         if note:
-            row = self.make_row(TYPE_NOTE, note)
+            row = self.make_row(self.TYPE_NOTE, note)
             self.writer.writerow(row)
         # separator
         self.writer.writerow(self.make_row())

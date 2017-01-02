@@ -5,8 +5,8 @@ from __future__ import unicode_literals
 
 import argparse
 
-from converters import convert_csv_to_opml, convert_csv_to_md, convert_opml_to_csv
-from taskpaper import convert_csv_to_taskpaper
+from converters import CsvToMarkdownConverter, OpmlToCsvConverter, CsvToOpmlConverter
+from taskpaper import CsvToTaskPaperConverter
 
 FORMAT_MD = 'md'
 FORMAT_OPML = 'opml'
@@ -22,15 +22,15 @@ def convert(args):
     """
 
     if args.format.lower() == FORMAT_OPML:
-        convert_csv_to_opml(args)
+        c = CsvToOpmlConverter(args)
     elif args.format.lower() == FORMAT_CSV:
-        convert_opml_to_csv(args)
+        c = OpmlToCsvConverter(args)
     elif args.format.lower() == FORMAT_TASKPAPER:
-        convert_csv_to_taskpaper(args)
+        c = CsvToTaskPaperConverter(args)
     else: 
-        convert_csv_to_md(args)
+        c = CsvToMarkdownConverter(args)
 
-
+    c.convert()
 
 
 def main():

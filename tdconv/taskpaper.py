@@ -10,21 +10,14 @@ from unicode_csv import UnicodeReader, UnicodeWriter
 
 from common import Converter, Note
 
-TP_TASK = Template('$indent- $content')
-TP_PROJECT = Template('$indent$content:')
-TP_NOTE = Template('$indent$content')
 
-def convert_csv_to_taskpaper(args):
-    """Convert todoist project file to TaskPaper."""
-    
-    c = TaskPaperConverter(args)
-    c.convert()
-
-
-class TaskPaperConverter(Converter):
+class CsvToTaskPaperConverter(Converter):
+    TP_TASK = Template('$indent- $content')
+    TP_PROJECT = Template('$indent$content:')
+    TP_NOTE = Template('$indent$content')
 
     def __init__(self, args):
-        super(TaskPaperConverter, self).__init__(args)
+        super(CsvToTaskPaperConverter, self).__init__(args)
 
     def convert(self):
         TP_PROJECT = Template('$title:')
@@ -47,10 +40,10 @@ class TaskPaperConverter(Converter):
         content = row.content
         # treat all 'unclickable' (sub-)tasks as projects
         if content.startswith('* '):
-            tpl = TP_PROJECT
+            tpl = self.TP_PROJECT
             content = content[2:]
         else:
-            tpl = TP_TASK
+            tpl = self.TP_TASK
 
         # add priority tag for prio 1-3:
         if int(row.priority) < 4: 
@@ -68,11 +61,11 @@ class TaskPaperConverter(Converter):
         tabs = '\t' * (indent + 1) # notes need an additional level of indentation
         if note.text:
             for line in note.text.split('\n'):
-                print(TP_NOTE.substitute(indent=tabs, content=line), file=target)
+                print(self.TP_NOTE.substitute(indent=tabs, content=line), file=target)
         if note.attachment:
             content = ': '.join((note.attachment.name, note.attachment.url))
             ## content = tp_file(attachment['url'])
-            print(TP_NOTE.substitute(indent=tabs, content=content), file=target)
+            print(self.TP_NOTE.substitute(indent=tabs, content=content), file=target)
 
     @staticmethod
     def tp_file(relpath):

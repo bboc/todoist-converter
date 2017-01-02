@@ -14,8 +14,12 @@ from const import AUTHOR, CONTENT, DATE, DATE_LANG, INDENT, PRIORITY, RESPONSIBL
 	
 
 class Converter(object):
+
     TYPE_TASK = 'task'
     TYPE_NOTE = 'note'
+
+    # OPML attribute for note
+    NOTE_ATTRIB = '_note'
 
     def __init__(self, args):
         print( ', '.join(FIELDNAMES).lower())
