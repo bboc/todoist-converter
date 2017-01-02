@@ -12,7 +12,7 @@ from unicode_csv import UnicodeReader, UnicodeWriter
 from const import AUTHOR, CONTENT, DATE, DATE_LANG, INDENT, PRIORITY, RESPONSIBLE, TYPE
 from const import TYPE_TASK, TYPE_NOTE
 
-from common import target_name, title, row_to_dict, process_note
+from common import target_name, title, row_to_dict, Note
 
 TP_TASK = Template('$indent- $content')
 TP_PROJECT = Template('$indent$content:')
@@ -60,13 +60,13 @@ def task_to_tp(row, target):
 
 def note_to_tp(row, target, indent):
     """Convert one note to TaskPaper."""
-    text, attachment = process_note(row[CONTENT])
+    note = Note(row[CONTENT])
     tabs = '\t' * (indent + 1) # notes need an additional level of indentation
-    if text:
-        for line in text.split('\n'):
+    if note.text:
+        for line in note.text.split('\n'):
             print(TP_NOTE.substitute(indent=tabs, content=line), file=target)
-    if attachment:
-        content = ': '.join((attachment['name'], attachment['url']))
+    if note.attachment:
+        content = ': '.join((note.attachment.name, note.attachment.url))
         ## content = tp_file(attachment['url'])
         print(TP_NOTE.substitute(indent=tabs, content=content), file=target)
 

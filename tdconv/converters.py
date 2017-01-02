@@ -9,7 +9,7 @@ from string import Template
 from unicode_csv import UnicodeReader, UnicodeWriter
 import xml.etree.cElementTree as ET
 
-from common import target_name, title, row_to_dict, process_note
+from common import target_name, title, row_to_dict, Note
 from const import AUTHOR, CONTENT, DATE, DATE_LANG, INDENT, PRIORITY, RESPONSIBLE, TYPE, FIELDNAMES
 from const import TYPE_TASK, TYPE_NOTE
 
@@ -32,11 +32,11 @@ def convert_csv_to_md(args):
                 if row[TYPE] == TYPE_TASK:
                     print('#' * (int(row[INDENT])+1), row[CONTENT], '\n', file=target)
                 elif row[TYPE] == TYPE_NOTE:
-                    text, attachment = process_note(row[CONTENT])
-                    if text:
-                        print(text, '\n', file=target)
-                    if attachment:
-                        print(att.substitute(name=attachment['name'], url=attachment['url']), '\n', file=target)
+                    note = Note((row[CONTENT]))
+                    if note.text:
+                        print(note.text, '\n', file=target)
+                    if note.attachment:
+                        print(att.substitute(name=note.attachment.name, url=note.attachment.url), '\n', file=target)
         print('\n', file=target)
 
 
@@ -70,11 +70,11 @@ def convert_csv_to_opml(args):
                 current = ET.SubElement(parents[level-1], 'outline', text=row[CONTENT])
                 parents[level] = current
             elif row[TYPE] == TYPE_NOTE:
-                text, attachment = process_note(row[CONTENT])
-                if attachment: 
-                    opml_append_note(current, img.substitute(name=attachment['name'], url=attachment['url']))
-                if text:
-                    opml_append_note(current, text)
+                note = Note(row[CONTENT])
+                if note.attachment: 
+                    opml_append_note(current, img.substitute(name=note.attachment.name, url=note.attachment.url))
+                if note.text:
+                    opml_append_note(current, note.text)
 
     tree = ET.ElementTree(opml)
     tree.write(target_name(args.file, 'opml'), encoding='UTF-8', xml_declaration=True)

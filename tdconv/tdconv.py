@@ -5,7 +5,6 @@ from __future__ import unicode_literals
 
 import argparse
 
-from common import target_name, title, row_to_dict, process_note
 from converters import convert_csv_to_opml, convert_csv_to_md, convert_opml_to_csv
 from taskpaper import convert_csv_to_taskpaper
 
