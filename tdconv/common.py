@@ -3,6 +3,7 @@
 from __future__ import print_function
 from __future__ import unicode_literals
 
+from collections import namedtuple
 import json
 import os.path
 import re
@@ -13,8 +14,12 @@ from const import AUTHOR, CONTENT, DATE, DATE_LANG, INDENT, PRIORITY, RESPONSIBL
 	
 
 class Converter(object):
+    TYPE_TASK = 'task'
+    TYPE_NOTE = 'note'
 
     def __init__(self, args):
+        print( ', '.join(FIELDNAMES).lower())
+        self.Row = namedtuple('Row', ', '.join(FIELDNAMES).lower())
         self.args = args
     
     @staticmethod

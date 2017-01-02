@@ -36,13 +36,12 @@ class CsvToMarkdownConverter(Converter):
         with codecs.open(self.target_name(self.args.file, 'md'), 'w+', 'utf-8') as target:
             print(ttl.substitute(title=self.title(self.args.file)), file=target)
             with codecs.open(self.args.file, 'r') as csvfile:
-                reader = UnicodeReader(csvfile)
-                for row in reader:
-                    row = self.row_to_dict(row)
-                    if row[TYPE] == TYPE_TASK:
-                        print('#' * (int(row[INDENT])+1), row[CONTENT], '\n', file=target)
-                    elif row[TYPE] == TYPE_NOTE:
-                        note = Note((row[CONTENT]))
+
+                for row in map(self.Row._make, UnicodeReader(csvfile)):
+                    if row.type == TYPE_TASK:
+                        print('#' * (int(row.indent)+1), row.content, '\n', file=target)
+                    elif row.type == TYPE_NOTE:
+                        note = Note((row.content))
                         if note.text:
                             print(note.text, '\n', file=target)
                         if note.attachment:
@@ -85,15 +84,14 @@ class CsvToOpmlConverter(Converter):
                 current.set(NOTE_ATTRIB, contents)
 
         with codecs.open(self.args.file, 'r') as csvfile:
-            reader = UnicodeReader(csvfile)
-            for row in reader:
-                row = self.row_to_dict(row)
-                if row[TYPE] == TYPE_TASK:
-                    level = int(row[INDENT])
-                    current = ET.SubElement(parents[level-1], 'outline', text=row[CONTENT])
+
+            for row in map(self.Row._make, UnicodeReader(csvfile)):
+                if row.type == TYPE_TASK:
+                    level = int(row.indent)
+                    current = ET.SubElement(parents[level-1], 'outline', text=row.content)
                     parents[level] = current
-                elif row[TYPE] == TYPE_NOTE:
-                    note = Note(row[CONTENT])
+                elif row.type == TYPE_NOTE:
+                    note = Note(row.content)
                     if note.attachment: 
                         opml_append_note(current, img.substitute(name=note.attachment.name, url=note.attachment.url))
                     if note.text:
@@ -126,7 +124,7 @@ class OpmlToCsvConverter(Converter):
                 self.process_element(outline)
 
     def make_row(self, type='', content='', indent = ''):
-        return [type, content, '', indent, '', '', '', '']
+        return [type, content, '', indent, '', '', '', '', '']
 
     def process_element(self, outline, level=1):
         # content
