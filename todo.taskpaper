@@ -1,0 +1,11 @@
+tdconv:
+  distribution:
+    - add license file
+    - create a first release after making downloads optional
+    - Create a formula for homebrew, see for explanation http://jimkubicek.com/blog/2015/02/14/creating-a-homebrew-formula-for-a-python-project/
+  code layout:
+    - create python package tdconv
+    - split code into common, taskpaper, opml, csv and commandline code
+    - refactor oop code
+  features:
+    - make download of attachments optional for all file types

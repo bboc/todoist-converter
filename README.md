@@ -1,6 +1,8 @@
 # todoist-converter
 
-Converter for Todoist CSV templates and projects to Markdown, Taskpaper and OPML, and back from OPML to Todoist CSV.
+Converter for Todoist CSV templates and projects to Markdown, TaskPaper and OPML, and back from OPML to Todoist CSV.
+
+Attachments are referenced via URL in Markdown and OPML files, and downloaded to an attachment folder for TaskPaper.
 
 
 ## Setup
@@ -38,14 +40,9 @@ Because Todoist cannot export mulitple projects to one file, each Taskpaper file
 
 1. Download the latest backup from Todoist (Settings -> Backups)
 2. unzip the resulting files
-3. `ls -b | xargs -I xx tdconv --format=taskpaper "xx"`
+3. `ls -bp | xargs -I xx tdconv --format=taskpaper "xx"`
 
 
 ## Notes
 
 Import of generated CSV tested with Todoist on OS-X version 715.
-
-
-## TODO
-
-- Create a formula for homebrew, see for explanation http://jimkubicek.com/blog/2015/02/14/creating-a-homebrew-formula-for-a-python-project/
