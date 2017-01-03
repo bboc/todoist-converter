@@ -99,8 +99,9 @@ class Attachment(object):
         and handle filename collisions."""
         dirname=Attachment.ATTACHMENTS_DIR
         self._create_attachments_dir(dirname)
-        relpath = self._find_filename(dirname, self.name)
+        relpath = self._find_filename(dirname)
         self._download_file(relpath)
+        return relpath
 
     def _create_attachments_dir(self, dirname):
         """Create directory if it does not exist, if it exists make sure it's a directory and not a file."""
@@ -109,17 +110,17 @@ class Attachment(object):
         if os.path.isfile(dirname):
             raise Exception(dirname, 'already exist as a file')
 
-    def _download_file(filename):
+    def _download_file(self, filename):
         """Download a URL to filename."""
         f = urllib2.urlopen(self.url)
         with open(filename, "wb") as target:
             target.write(f.read())        
 
-    def _find_filename(dirname):
+    def _find_filename(self, dirname):
         """Indentify (and return) a filename for the attachment: if filename is already taken,
         try <filename>(n>1).<ext> until file can be downloaded."""
-        full_filename = os.path.join(dirname, self.filename)
-        root, ext = os.path.splitext(self.filename)
+        full_filename = os.path.join(dirname, self.name)
+        root, ext = os.path.splitext(self.name)
         index = 1
         tpl = Template("$root($index)$ext")
         while os.path.exists(full_filename):

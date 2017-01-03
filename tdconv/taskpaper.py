@@ -75,8 +75,11 @@ class CsvToTaskPaperConverter(Converter):
 
     def _process_note_attachment(self, attachment, tabs):
         if attachment:
-            content = ': '.join((attachment.name, attachment.url))
-            ## content = tp_file(attachment['url'])
+            if self.download_attachments:
+                relpath = attachment.download()
+                content = self.tp_file(relpath)
+            else:
+                content = ': '.join((attachment.name, attachment.url))
             self._print(self.TP_NOTE.substitute(indent=tabs, content=content))
 
     @staticmethod

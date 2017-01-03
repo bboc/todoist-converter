@@ -89,3 +89,8 @@ class TodoistConverterTests(unittest.TestCase):
         self.compare_results(os.path.join(self.results, 'full-todoist-test-project.taskpaper'),
                              make_path('full-todoist-test-project-result.taskpaper'))
     
+    def test_todoist_to_taskpaper_with_download(self):
+        args = Namespace(file=make_path('full-todoist-test-project.csv'), format='taskpaper', download=True)
+        convert(args)
+        self.compare_results(os.path.join(self.results, 'full-todoist-test-project.taskpaper'),
+                             make_path('full-todoist-test-project-download-result.taskpaper'))
