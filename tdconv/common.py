@@ -3,6 +3,7 @@
 from __future__ import print_function
 from __future__ import unicode_literals
 
+import codecs
 from collections import namedtuple
 import json
 import os.path
@@ -11,7 +12,8 @@ from string import Template
 import urllib2
 
 from const import AUTHOR, CONTENT, DATE, DATE_LANG, INDENT, PRIORITY, RESPONSIBLE, TYPE, FIELDNAMES
-	
+from unicode_csv import UnicodeReader, UnicodeWriter
+
 
 class Converter(object):
 
@@ -46,6 +48,23 @@ class Converter(object):
     @staticmethod
     def row_to_dict(row):
         return dict(zip(FIELDNAMES,row))
+
+
+    def convert(self):
+        """
+        Should be overridden in subclasses. Subclasses need to implement 
+        process_task(row) and process_note(note).
+        """
+        with codecs.open(self.args.file, 'r') as csvfile:
+            for row in map(self.Row._make, UnicodeReader(csvfile)):
+                if row.type == self.TYPE_TASK:
+                    self.process_task(row)
+                elif row.type == self.TYPE_NOTE:
+                    note = Note(row.content)
+                    self.process_note(note)
+
+    def _print(self, *msg):
+        print(*msg, file=self.target)
 
 
 class Note(object):

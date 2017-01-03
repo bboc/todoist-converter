@@ -15,37 +15,36 @@ from const import FIELDNAMES
 class CsvToMarkdownConverter(Converter):
     """Convert CSV to Markdown."""
 
+    ATTACHMENT_LINK = Template('[$name]($url)')
+    TITLE = Template('# $title\n')
+
     def __init__(self, args):
         super(CsvToMarkdownConverter, self).__init__(args)
 
     def convert(self):
-        att = Template('[$name]($url)')
-        ttl = Template('# $title\n')
+        with codecs.open(self.target_name(self.args.file, 'md'), 'w+', 'utf-8') as self.target:
+            self._print(self.TITLE.substitute(title=self.title(self.args.file)))
+            super(CsvToMarkdownConverter, self).convert()
+            self._print('\n')
+    
+    def process_task(self, row):
+        self._print('#' * (int(row.indent)+1), row.content, '\n')
 
-        with codecs.open(self.target_name(self.args.file, 'md'), 'w+', 'utf-8') as target:
-            print(ttl.substitute(title=self.title(self.args.file)), file=target)
-            with codecs.open(self.args.file, 'r') as csvfile:
-
-                for row in map(self.Row._make, UnicodeReader(csvfile)):
-                    if row.type == self.TYPE_TASK:
-                        print('#' * (int(row.indent)+1), row.content, '\n', file=target)
-                    elif row.type == self.TYPE_NOTE:
-                        note = Note((row.content))
-                        if note.text:
-                            print(note.text, '\n', file=target)
-                        if note.attachment:
-                            print(att.substitute(name=note.attachment.name, url=note.attachment.url), '\n', file=target)
-            print('\n', file=target)
+    def process_note(self, note):
+        if note.text:
+            self._print(note.text, '\n')
+        if note.attachment:
+            self._print(self.ATTACHMENT_LINK.substitute(name=note.attachment.name, url=note.attachment.url), '\n')
 
 
 class CsvToOpmlConverter(Converter):
     """Convert Todoist CSV to OPML."""
+    OPML_IMAGE = Template('Image "$name": $url')
 
     def __init__(self, args):
         super(CsvToOpmlConverter, self).__init__(args)
 
     def convert(self):
-        img = Template('Image "$name": $url')
 
         opml = ET.Element("opml", version='1.0')
         head = ET.SubElement(opml, 'head')
@@ -53,32 +52,30 @@ class CsvToOpmlConverter(Converter):
         ET.SubElement(head, 'expansionState').text = '0,1'
         body = ET.SubElement(opml, 'body')
 
-        parents = {}
-        parents[0] = body
+        self.parents = {}
+        self.parents[0] = body
 
-        def opml_append_note(current, contents):
-            note = current.get(self.NOTE_ATTRIB)
-            if note: 
-                current.set(self.NOTE_ATTRIB, '\n\n'.join((note, contents)))
-            else:
-                current.set(self.NOTE_ATTRIB, contents)
-
-        with codecs.open(self.args.file, 'r') as csvfile:
-            for row in map(self.Row._make, UnicodeReader(csvfile)):
-                if row.type == self.TYPE_TASK:
-                    level = int(row.indent)
-                    current = ET.SubElement(parents[level-1], 'outline', text=row.content)
-                    parents[level] = current
-                elif row.type == self.TYPE_NOTE:
-                    note = Note(row.content)
-                    if note.attachment: 
-                        opml_append_note(current, img.substitute(name=note.attachment.name, url=note.attachment.url))
-                    if note.text:
-                        opml_append_note(current, note.text)
-
+        super(CsvToOpmlConverter, self).convert()
         tree = ET.ElementTree(opml)
         tree.write(self.target_name(self.args.file, 'opml'), encoding='UTF-8', xml_declaration=True)
 
+    def process_task(self, row):
+        level = int(row.indent)
+        self.current = ET.SubElement(self.parents[level-1], 'outline', text=row.content)
+        self.parents[level] = self.current
+
+    def process_note(self, note):
+        if note.attachment: 
+            self.opml_append_note(self.OPML_IMAGE.substitute(name=note.attachment.name, url=note.attachment.url))
+        if note.text:
+            self.opml_append_note(note.text)
+
+    def opml_append_note(self, contents):
+        note = self.current.get(self.NOTE_ATTRIB)
+        if note: 
+            self.current.set(self.NOTE_ATTRIB, '\n\n'.join((note, contents)))
+        else:
+            self.current.set(self.NOTE_ATTRIB, contents)
 
 
 class OpmlToCsvConverter(Converter):

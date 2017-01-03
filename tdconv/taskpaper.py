@@ -3,7 +3,6 @@
 from __future__ import print_function
 from __future__ import unicode_literals
 
-
 import codecs
 from string import Template
 from unicode_csv import UnicodeReader, UnicodeWriter
@@ -15,28 +14,23 @@ class CsvToTaskPaperConverter(Converter):
     TP_TASK = Template('$indent- $content')
     TP_PROJECT = Template('$indent$content:')
     TP_NOTE = Template('$indent$content')
+    TP_TOP_PROJECT = Template('$title:')
 
     def __init__(self, args):
         super(CsvToTaskPaperConverter, self).__init__(args)
 
     def convert(self):
-        TP_PROJECT = Template('$title:')
-        indent = 1
-
-        with codecs.open(self.target_name(self.args.file, 'taskpaper'), 'w+', 'utf-8') as target:
+        self.indent = 1
+        with codecs.open(self.target_name(self.args.file, 'taskpaper'), 'w+', 'utf-8') as self.target:
             # Add file name as top level project (all tasks belong to that project)
-            print(TP_PROJECT.substitute(title=self.title(self.args.file)), file=target)
-            with codecs.open(self.args.file, 'r') as csvfile:
-                for row in map(self.Row._make, UnicodeReader(csvfile)):
-                    if row.type == self.TYPE_TASK:
-                        indent = int(row.indent)
-                        self.task_to_tp(row, target)
-                    elif row.type == self.TYPE_NOTE:
-                        self.note_to_tp(row, target, indent)
-            print('\n', file=target)
-
-    def task_to_tp(self, row, target):
+            self._print(self.TP_TOP_PROJECT.substitute(title=self.title(self.args.file)))
+            
+            super(CsvToTaskPaperConverter, self).convert()
+            self._print('\n')
+    
+    def process_task(self, row):
         """Convert one task to TaskPaper."""
+        self.indent = int(row.indent)
         content = row.content
         # treat all 'unclickable' (sub-)tasks as projects
         if content.startswith('* '):
@@ -53,19 +47,19 @@ class CsvToTaskPaperConverter(Converter):
             content = ''.join((content, ' @due(%s)' % row.date))
         # clean tags
         content = content.replace('@/', '@')
-        print(tpl.substitute(indent = '\t' * (int(row.indent)), content=content), file=target)
+        self._print(tpl.substitute(indent = '\t' * (int(row.indent)), content=content))
 
-    def note_to_tp(self, row, target, indent):
+
+    def process_note(self, note):
         """Convert one note to TaskPaper."""
-        note = Note(row.content)
-        tabs = '\t' * (indent + 1) # notes need an additional level of indentation
+        tabs = '\t' * (self.indent + 1) # notes need an additional level of indentation
         if note.text:
             for line in note.text.split('\n'):
-                print(self.TP_NOTE.substitute(indent=tabs, content=line), file=target)
+                self._print(self.TP_NOTE.substitute(indent=tabs, content=line))
         if note.attachment:
             content = ': '.join((note.attachment.name, note.attachment.url))
             ## content = tp_file(attachment['url'])
-            print(self.TP_NOTE.substitute(indent=tabs, content=content), file=target)
+            self._print(self.TP_NOTE.substitute(indent=tabs, content=content))
 
     @staticmethod
     def tp_file(relpath):
