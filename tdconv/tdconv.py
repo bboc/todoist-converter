@@ -5,7 +5,8 @@ from __future__ import unicode_literals
 
 import argparse
 
-from converters import CsvToMarkdownConverter, OpmlToCsvConverter, CsvToOpmlConverter
+from markdown import CsvToMarkdownConverter
+from opml import OpmlToCsvConverter, CsvToOpmlConverter
 from taskpaper import CsvToTaskPaperConverter
 
 FORMAT_MD = 'md'
