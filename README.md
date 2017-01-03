@@ -1,13 +1,15 @@
 # todoist-converter
 
-Converter for Todoist CSV templates and projects to Markdown, TaskPaper and OPML, and back from OPML to Todoist CSV.
+Convert Todoist CSV templates and entire Todoist backup TaskPaper, Markdown, or OPML, and convert OPML-Files to Todoist CSV templates.
+
+Wheter you're ready to move from Todoist to Taskpaper, or if you just want to convert individual projects to opml and back again - e.g. for use in [CarbonFin Outliner](http://carbonfin.com/) or OmniOutliner - todoist-convert has you covered.
 
 Todoist note attachments are referenced either referenced via URL, or optionally downloaded for Markdown or TaskPaper files.
 
 
 ## Setup
 
-Download the source code or clone the repository, then set it up via 
+Download a [release from github](https://github.com/bboc/todoist-converter/releases) or clone the repository, then set it up via 
 
 `python setup.py`
 
@@ -42,7 +44,7 @@ Because Todoist cannot export mulitple projects to one file, each Taskpaper file
 
 1. Download the latest backup from Todoist (Settings -> Backups)
 2. unzip the resulting files
-3. `ls -bp | xargs -I xx tdconv --format=taskpaper "xx"`
+3. `ls -bp | xargs -I xx tdconv -df taskpaper "xx"`
 
 
 ## Notes
