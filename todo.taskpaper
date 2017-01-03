@@ -11,4 +11,4 @@ tdconv:
     - use namedtuple instead of dict for csv rows @done
 
   features:
-    - make download of attachments optional for all file types
+    - make download of attachments optional for TaskPaper and Markdown @done

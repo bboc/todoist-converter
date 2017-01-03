@@ -2,12 +2,12 @@
 
 Converter for Todoist CSV templates and projects to Markdown, TaskPaper and OPML, and back from OPML to Todoist CSV.
 
-Attachments are referenced via URL in Markdown and OPML files, and downloaded to an attachment folder for TaskPaper.
+Todoist note attachments are referenced either referenced via URL, or optionally downloaded for Markdown or TaskPaper files.
 
 
 ## Setup
 
-Clone the repository and set it up via 
+Download the source code or clone the repository, then set it up via 
 
 `python setup.py`
 
@@ -18,6 +18,7 @@ Clone the repository and set it up via
 
 Result will be written to the current folder.
 
+
 ## Migrating projects from Todoist to Taskpaper
 
 Because Todoist cannot export mulitple projects to one file, each Taskpaper file is exported as one project, so that it's easy to combine individual project exports, e.g. via copy and paste in the Taskpaper app or via `cat file1 file2 >destination`
@@ -26,6 +27,7 @@ Because Todoist cannot export mulitple projects to one file, each Taskpaper file
 
 * due dates might not be recognized correctly by TaskPaper Mac app.
 * project notes are not exported by Todoist
+
 
 ### Converting a single project/template
 
