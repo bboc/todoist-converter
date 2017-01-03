@@ -19,6 +19,7 @@ class CsvToTaskPaperConverter(Converter):
 
     def __init__(self, args):
         super(CsvToTaskPaperConverter, self).__init__(args)
+        self.download_attachments = args.download
 
     def convert(self):
         self.indent = 1
@@ -64,11 +65,17 @@ class CsvToTaskPaperConverter(Converter):
     def process_note(self, note):
         """Convert one note to TaskPaper."""
         tabs = '\t' * (self.indent + 1) # notes need an additional level of indentation
-        if note.text:
-            for line in note.text.split('\n'):
+        self._process_note_text(note.text, tabs)
+        self._process_note_attachment(note.attachment, tabs)
+
+    def _process_note_text(self, text, tabs):
+        if text:
+            for line in text.split('\n'):
                 self._print(self.TP_NOTE.substitute(indent=tabs, content=line))
-        if note.attachment:
-            content = ': '.join((note.attachment.name, note.attachment.url))
+
+    def _process_note_attachment(self, attachment, tabs):
+        if attachment:
+            content = ': '.join((attachment.name, attachment.url))
             ## content = tp_file(attachment['url'])
             self._print(self.TP_NOTE.substitute(indent=tabs, content=content))
 

@@ -84,7 +84,7 @@ class TodoistConverterTests(unittest.TestCase):
                              make_path('unicode-opml-result.csv'))
 
     def test_todoist_to_taskpaper(self):
-        args = Namespace(file=make_path('full-todoist-test-project.csv'), format='taskpaper')
+        args = Namespace(file=make_path('full-todoist-test-project.csv'), format='taskpaper', download=False)
         convert(args)
         self.compare_results(os.path.join(self.results, 'full-todoist-test-project.taskpaper'),
                              make_path('full-todoist-test-project-result.taskpaper'))

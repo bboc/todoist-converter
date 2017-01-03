@@ -14,7 +14,6 @@ FORMAT_CSV = 'todoist'
 FORMAT_TASKPAPER = 'taskpaper'
 
 
-
 def convert(args):
     """
     Convert file to specified format.
@@ -29,9 +28,7 @@ def convert(args):
         c = CsvToTaskPaperConverter(args)
     else: 
         c = CsvToMarkdownConverter(args)
-
     c.convert()
-
 
 def main():
     parser = argparse.ArgumentParser(
@@ -41,7 +38,8 @@ def main():
                         help='increase level of verbosity (repeat up to 3 times)')
     parser.add_argument('--format', '-f', default='md',
                         help='format of target file: md, opml, todoist')
-
+    parser.add_argument('--download', '-d', action="store_true", default=False,
+                        help='download attachments')
     parser.add_argument('file',
                         help='file to convert')
     
