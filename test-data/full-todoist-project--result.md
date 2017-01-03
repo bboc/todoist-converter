@@ -1,4 +1,4 @@
-# full-todoist-test-project
+# full-todoist-project
 
 ## * unclickable task 
 
