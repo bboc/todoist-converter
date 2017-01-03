@@ -47,10 +47,26 @@ class TodoistConverterTests(unittest.TestCase):
 
 
     def test_basic_conversion_to_md(self):
-        args = Namespace(file=make_path('basic-test.csv'), format='md')
+        args = Namespace(file=make_path('basic-test.csv'), format='md', download=False)
         convert(args)
         self.compare_results(os.path.join(self.results, 'basic-test.md'),
                              make_path('basic-result.md'))
+
+    def test_conversion_to_md_with_download(self):
+            args = Namespace(file=make_path('full-todoist-test-project.csv'),
+                             format='md', 
+                             download=True)
+            convert(args)
+            self.compare_results(os.path.join(self.results, 'full-todoist-test-project.md'),
+                                 make_path('full-todoist-test-project-download-result.md'))
+
+    def test_conversion_to_md(self):
+            args = Namespace(file=make_path('full-todoist-test-project.csv'),
+                             format='md', 
+                             download=False)
+            convert(args)
+            self.compare_results(os.path.join(self.results, 'full-todoist-test-project.md'),
+                                 make_path('full-todoist-test-project-result.md'))
 
     def test_basic_conversion_to_opml(self):
         args = Namespace(file=make_path('basic-test.csv'), format='opml')
@@ -66,7 +82,7 @@ class TodoistConverterTests(unittest.TestCase):
 
 
     def test_unicode_conversion_to_md(self):
-        args = Namespace(file=make_path('unicode-and-quotes-test.csv'), format='md')
+        args = Namespace(file=make_path('unicode-and-quotes-test.csv'), format='md', download=True)
         convert(args)
         self.compare_results(os.path.join(self.results, 'unicode-and-quotes-test.md'),
                              make_path('unicode-and-quotes-result.md'))
@@ -84,13 +100,17 @@ class TodoistConverterTests(unittest.TestCase):
                              make_path('unicode-opml-result.csv'))
 
     def test_todoist_to_taskpaper(self):
-        args = Namespace(file=make_path('full-todoist-test-project.csv'), format='taskpaper', download=False)
+        args = Namespace(file=make_path('full-todoist-test-project.csv'), 
+                         format='taskpaper', 
+                         download=False)
         convert(args)
         self.compare_results(os.path.join(self.results, 'full-todoist-test-project.taskpaper'),
                              make_path('full-todoist-test-project-result.taskpaper'))
     
     def test_todoist_to_taskpaper_with_download(self):
-        args = Namespace(file=make_path('full-todoist-test-project.csv'), format='taskpaper', download=True)
+        args = Namespace(file=make_path('full-todoist-test-project.csv'), 
+                                        format='taskpaper', 
+                                        download=True)
         convert(args)
         self.compare_results(os.path.join(self.results, 'full-todoist-test-project.taskpaper'),
                              make_path('full-todoist-test-project-download-result.taskpaper'))

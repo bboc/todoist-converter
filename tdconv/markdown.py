@@ -12,10 +12,13 @@ class CsvToMarkdownConverter(Converter):
     """Convert CSV to Markdown."""
 
     ATTACHMENT_LINK = Template('[$name]($url)')
+    IMAGE_LINK = Template('![$name]($url)')
+    IMAGE_EXT = ['.jpg', '.jpeg', '.png', '.gif']
     TITLE = Template('# $title\n')
 
     def __init__(self, args):
         super(CsvToMarkdownConverter, self).__init__(args)
+        self.download_attachments = args.download
 
     def convert(self):
         with codecs.open(self.target_name(self.source_name, 'md'), 'w+', 'utf-8') as self.target:
@@ -29,5 +32,25 @@ class CsvToMarkdownConverter(Converter):
     def process_note(self, note):
         if note.text:
             self._print(note.text, '\n')
-        if note.attachment:
-            self._print(self.ATTACHMENT_LINK.substitute(name=note.attachment.name, url=note.attachment.url), '\n')
+        self._process_note_attachment(note.attachment)
+
+
+    def _process_note_attachment(self, attachment):
+        if attachment:
+            if self.download_attachments:
+                url = attachment.download()
+            else:
+                url = attachment.url
+            self._attachment_reference(attachment.name, url)
+    
+    def _attachment_reference(self, name, url):
+        """
+        Determine if attachment is an image, if so, create image reference,
+        otherwise create a link.
+        """
+        tpl = self.ATTACHMENT_LINK
+        for ext in self.IMAGE_EXT:
+            if url.lower().endswith(ext):
+                tpl = self.IMAGE_LINK
+        url = url.replace(' ', '%20')
+        self._print(tpl.substitute(name=name, url=url), '\n')
