@@ -11,7 +11,7 @@ import re
 from string import Template
 import urllib2
 
-from const import AUTHOR, CONTENT, DATE, DATE_LANG, INDENT, PRIORITY, RESPONSIBLE, TYPE, FIELDNAMES
+from const import FIELDNAMES
 from unicode_csv import UnicodeReader, UnicodeWriter
 
 
@@ -24,9 +24,8 @@ class Converter(object):
     NOTE_ATTRIB = '_note'
 
     def __init__(self, args):
-        print( ', '.join(FIELDNAMES).lower())
         self.Row = namedtuple('Row', ', '.join(FIELDNAMES).lower())
-        self.args = args
+        self.source_name = args.file
     
     @staticmethod
     def title(filename):
@@ -49,13 +48,12 @@ class Converter(object):
     def row_to_dict(row):
         return dict(zip(FIELDNAMES,row))
 
-
     def convert(self):
         """
         Should be overridden in subclasses. Subclasses need to implement 
         process_task(row) and process_note(note).
         """
-        with codecs.open(self.args.file, 'r') as csvfile:
+        with codecs.open(self.source_name, 'r') as csvfile:
             for row in map(self.Row._make, UnicodeReader(csvfile)):
                 if row.type == self.TYPE_TASK:
                     self.process_task(row)
@@ -82,7 +80,6 @@ class Note(object):
     
     def _extract_content_and_attachment(self):
         """Extract note text and attachment (if present)."""
-        
         match = Note.NOTE.match(self.text)
         if match:
             j = json.loads(match.group('attachment'))
@@ -129,6 +126,3 @@ class Attachment(object):
             index += 1 
             full_filename = os.path.join(dirname,tpl.substitute(root=root, index=index, ext=ext))
         return full_filename
-
-
-

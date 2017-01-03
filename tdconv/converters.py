@@ -22,8 +22,8 @@ class CsvToMarkdownConverter(Converter):
         super(CsvToMarkdownConverter, self).__init__(args)
 
     def convert(self):
-        with codecs.open(self.target_name(self.args.file, 'md'), 'w+', 'utf-8') as self.target:
-            self._print(self.TITLE.substitute(title=self.title(self.args.file)))
+        with codecs.open(self.target_name(self.source_name, 'md'), 'w+', 'utf-8') as self.target:
+            self._print(self.TITLE.substitute(title=self.title(self.source_name)))
             super(CsvToMarkdownConverter, self).convert()
             self._print('\n')
     
@@ -45,19 +45,20 @@ class CsvToOpmlConverter(Converter):
         super(CsvToOpmlConverter, self).__init__(args)
 
     def convert(self):
-
-        opml = ET.Element("opml", version='1.0')
-        head = ET.SubElement(opml, 'head')
-        ET.SubElement(head, 'title').text = self.title(self.args.file)
-        ET.SubElement(head, 'expansionState').text = '0,1'
-        body = ET.SubElement(opml, 'body')
-
-        self.parents = {}
-        self.parents[0] = body
-
+        opml, self.parents = self._prepare_document()
         super(CsvToOpmlConverter, self).convert()
         tree = ET.ElementTree(opml)
-        tree.write(self.target_name(self.args.file, 'opml'), encoding='UTF-8', xml_declaration=True)
+        tree.write(self.target_name(self.source_name, 'opml'), encoding='UTF-8', xml_declaration=True)
+
+    def _prepare_document(self):
+        opml = ET.Element("opml", version='1.0')
+        head = ET.SubElement(opml, 'head')
+        ET.SubElement(head, 'title').text = self.title(self.source_name)
+        ET.SubElement(head, 'expansionState').text = '0,1'
+        body = ET.SubElement(opml, 'body')
+        parents = {}
+        parents[0] = body
+        return opml, parents
 
     def process_task(self, row):
         level = int(row.indent)
@@ -65,12 +66,12 @@ class CsvToOpmlConverter(Converter):
         self.parents[level] = self.current
 
     def process_note(self, note):
-        if note.attachment: 
-            self.opml_append_note(self.OPML_IMAGE.substitute(name=note.attachment.name, url=note.attachment.url))
         if note.text:
-            self.opml_append_note(note.text)
+            self._opml_append_note(note.text)
+        if note.attachment: 
+            self._opml_append_note(self.OPML_IMAGE.substitute(name=note.attachment.name, url=note.attachment.url))
 
-    def opml_append_note(self, contents):
+    def _opml_append_note(self, contents):
         note = self.current.get(self.NOTE_ATTRIB)
         if note: 
             self.current.set(self.NOTE_ATTRIB, '\n\n'.join((note, contents)))
@@ -85,30 +86,35 @@ class OpmlToCsvConverter(Converter):
         super(OpmlToCsvConverter, self).__init__(args)
 
     def convert(self):
-        tree = ET.parse(self.args.file)
-        opml = tree.getroot()
-        body = opml.find('body')
-        with codecs.open(self.target_name(self.args.file, 'csv'), 'w+') as target:
+        document_body = self._prepare_document()
+        with codecs.open(self.target_name(self.source_name, 'csv'), 'w+') as target:
             self.writer = UnicodeWriter(target, FIELDNAMES)
-            self.writer.writerow(FIELDNAMES)
-
-            for outline in body:
+            self._write_header_row()
+            for outline in document_body:
                 self.process_element(outline)
 
-    def make_row(self, type='', content='', indent = ''):
+    def _prepare_document(self):
+        tree = ET.parse(self.source_name)
+        opml = tree.getroot()
+        return opml.find('body')
+
+    def _write_header_row(self):
+        self.writer.writerow(FIELDNAMES)
+
+    def _make_row(self, type='', content='', indent = ''):
         return [type, content, '', indent, '', '', '', '', '']
 
     def process_element(self, outline, level=1):
         # content
-        row = self.make_row(self.TYPE_TASK, outline.get('text'), str(level))
+        row = self._make_row(self.TYPE_TASK, outline.get('text'), str(level))
         self.writer.writerow(row)
         # note
         note = outline.get(self.NOTE_ATTRIB)
         if note:
-            row = self.make_row(self.TYPE_NOTE, note)
+            row = self._make_row(self.TYPE_NOTE, note)
             self.writer.writerow(row)
         # separator
-        self.writer.writerow(self.make_row())
+        self.writer.writerow(self._make_row())
         for subelement in outline.findall('outline'):
             self.process_element(subelement, level+1)
 

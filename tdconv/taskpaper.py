@@ -15,39 +15,50 @@ class CsvToTaskPaperConverter(Converter):
     TP_PROJECT = Template('$indent$content:')
     TP_NOTE = Template('$indent$content')
     TP_TOP_PROJECT = Template('$title:')
+    TP_UNCLICABLE_TASK_PREFIX = '* '
 
     def __init__(self, args):
         super(CsvToTaskPaperConverter, self).__init__(args)
 
     def convert(self):
         self.indent = 1
-        with codecs.open(self.target_name(self.args.file, 'taskpaper'), 'w+', 'utf-8') as self.target:
+        with codecs.open(self.target_name(self.source_name, 'taskpaper'), 'w+', 'utf-8') as self.target:
             # Add file name as top level project (all tasks belong to that project)
-            self._print(self.TP_TOP_PROJECT.substitute(title=self.title(self.args.file)))
-            
+            self._print(self.TP_TOP_PROJECT.substitute(title=self.title(self.source_name)))
             super(CsvToTaskPaperConverter, self).convert()
             self._print('\n')
     
     def process_task(self, row):
         """Convert one task to TaskPaper."""
-        self.indent = int(row.indent)
         content = row.content
-        # treat all 'unclickable' (sub-)tasks as projects
-        if content.startswith('* '):
+        # treat 'unclickable' (sub-)tasks as projects
+        if content.startswith(self.TP_UNCLICABLE_TASK_PREFIX):
             tpl = self.TP_PROJECT
             content = content[2:]
         else:
             tpl = self.TP_TASK
 
-        # add priority tag for prio 1-3:
+        content = self._add_priority(row, content)
+        content = self._add_due_date(row, content)
+        content = self._clean_tags(row, content)
+        self.indent = int(row.indent)
+        self._print(tpl.substitute(indent = '\t' * (int(row.indent)), content=content))
+
+    def _add_priority(self, row, content):
+        """Add priority tag for prio 1-3."""
         if int(row.priority) < 4: 
             content = ''.join((content, ' @priority(%s)' % row.priority))
-        # add @due(date):
+        return content
+
+    def _add_due_date(self, row, content):
+        """Add @due(date)."""
         if row.date:
             content = ''.join((content, ' @due(%s)' % row.date))
-        # clean tags
-        content = content.replace('@/', '@')
-        self._print(tpl.substitute(indent = '\t' * (int(row.indent)), content=content))
+        return content
+
+    def _clean_tags(self, row, content):
+        """Taskpaper does not like tags starting with '@/'."""
+        return content.replace('@/', '@')
 
 
     def process_note(self, note):
@@ -65,4 +76,3 @@ class CsvToTaskPaperConverter(Converter):
     def tp_file(relpath):
         """Make relative TaskPaper file reference: prefix with ./ and escape spaces."""
         return ''.join(('./', relpath.replace(' ', '\ ')))
-
