@@ -1,14 +1,20 @@
-tdconv:
-  distribution:
-    - add license file
-    - create a first release after making downloads optional
-    - Create a formula for homebrew, see for explanation http://jimkubicek.com/blog/2015/02/14/creating-a-homebrew-formula-for-a-python-project/
-  code layout:
-    - create python package tdconv @done
-    - split code into common, taskpaper, converters and commandline code @done
-    - refactor taskpaper converter to oop code @done
-    - refactor processing of notes/attachments to oop code @done
-    - use namedtuple instead of dict for csv rows @done
+todoist-converter:
+	code layout:
+		- create python package tdconv @done
+		- split code into common, taskpaper, converters and commandline code @done
+		- refactor taskpaper converter to oop code @done
+		- refactor processing of notes/attachments to oop code @done
+		- use namedtuple instead of dict for csv rows @done
+	
+	distribution:
+		- add license file @small
+		- create a first release after making downloads optional @done
+		- Create a formula for homebrew, see for explanation http://jimkubicek.com/blog/2015/02/14/creating-a-homebrew-formula-for-a-python-project/ @medium
+	features:
+		- add commandline option for output file, append output of markdown and taskpaper to file if it exists
+		- make download of attachments optional for TaskPaper and Markdown @done
+		- make gui and package as standalone app so more people can use it @large
+		- strip todoist IDs from filename and project name @done
+		- process an entire backup zip file @large
 
-  features:
-    - make download of attachments optional for TaskPaper and Markdown @done
+
