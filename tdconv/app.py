@@ -93,7 +93,10 @@ class App:
         print("source", self.filename.get())
         print("target", self.output_file.get())
 
-        args = Namespace(file=self.output_file.get(), format=self.format.get(), output=self.output_file.get(), download=self.download.get())
+        args = Namespace(file=self.filename.get(), 
+                         format=self.format.get(), 
+                         output=self.output_file.get(), 
+                         download=self.download.get())
         convert(args)
 
 
