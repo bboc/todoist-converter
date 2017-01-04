@@ -6,7 +6,9 @@ from __future__ import unicode_literals
 import codecs
 from collections import namedtuple
 import os.path
+import re
 import urllib2
+import zipfile
 
 from const import FIELDNAMES
 from unicode_csv import UnicodeReader
@@ -18,8 +20,7 @@ class Converter(object):
     TYPE_TASK = 'task'
     TYPE_NOTE = 'note'
 
-    # OPML attribute for note
-    NOTE_ATTRIB = '_note'
+    TITLE = re.compile("(?P<title>.*?) \[[0-9]{5,14}\]")
 
     def __init__(self, args):
         self.Row = namedtuple('Row', ', '.join(FIELDNAMES).lower())
@@ -27,12 +28,13 @@ class Converter(object):
     
     @staticmethod
     def title(filename):
-        """Extract title from filename."""
-        s = os.path.join(os.path.splitext(os.path.basename(filename))[0])
-        if s[-4:].lower() == '.csv':
-            return s[:-4]
-        else:
-            return s
+        """Extract title from filename. Remove Todoist Id"""
+        # strip path and extension
+        s = os.path.splitext(os.path.basename(filename))[0]
+        match = Converter.TITLE.match(s)
+        if match:
+            return match.group('title')
+        return s
 
     @staticmethod
     def target_name(filename, ext):
@@ -41,10 +43,6 @@ class Converter(object):
             return '.'.join((os.path.splitext(os.path.basename(filename))[0], ext))
         except UnicodeDecodeError:
             raise Exception("can't process filename", filename, ext)
-
-    @staticmethod
-    def row_to_dict(row):
-        return dict(zip(FIELDNAMES,row))
 
     def convert(self):
         """
@@ -63,3 +61,16 @@ class Converter(object):
         print(*msg, file=self.target)
 
 
+class Downloadable(object):
+    def __init__(self, args):
+        super(Downloadable, self).__init__(args)
+        self.download_attachments = args.download
+
+
+
+class ZipProcessor(object):
+
+    def convert(self):
+        if os.path.splitext(self.source_name)[1].lower() == '.zip':
+            with ZipFile('spam.zip', 'w') as myzip:
+                print(repr(myzip.infolist()))

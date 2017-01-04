@@ -11,8 +11,12 @@ import xml.etree.cElementTree as ET
 from common import Converter
 from const import FIELDNAMES
 
+class OpmlConverter(Converter):
+    # OPML attribute for note
+    NOTE_ATTRIB = '_note'
 
-class CsvToOpmlConverter(Converter):
+
+class CsvToOpmlConverter(OpmlConverter):
     """Convert Todoist CSV to OPML."""
     OPML_IMAGE = Template('Image "$name": $url')
 
@@ -54,7 +58,7 @@ class CsvToOpmlConverter(Converter):
             self.current.set(self.NOTE_ATTRIB, contents)
 
 
-class OpmlToCsvConverter(Converter):
+class OpmlToCsvConverter(OpmlConverter):
     """Convert OPML file to Todoist CSV."""
 
     def __init__(self, args):

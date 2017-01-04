@@ -7,19 +7,15 @@ import codecs
 from string import Template
 from unicode_csv import UnicodeReader, UnicodeWriter
 
-from common import Converter, Note
+from common import Converter, Downloadable
 
 
-class CsvToTaskPaperConverter(Converter):
+class CsvToTaskPaperConverter(Downloadable, Converter):
     TP_TASK = Template('$indent- $content')
     TP_PROJECT = Template('$indent$content:')
     TP_NOTE = Template('$indent$content')
     TP_TOP_PROJECT = Template('$title:')
     TP_UNCLICABLE_TASK_PREFIX = '* '
-
-    def __init__(self, args):
-        super(CsvToTaskPaperConverter, self).__init__(args)
-        self.download_attachments = args.download
 
     def convert(self):
         self.indent = 1

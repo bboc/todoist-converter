@@ -23,14 +23,16 @@ def convert(args):
     """
 
     if args.format.lower() == FORMAT_OPML:
-        c = CsvToOpmlConverter(args)
+        c = CsvToOpmlConverter
     elif args.format.lower() == FORMAT_CSV:
-        c = OpmlToCsvConverter(args)
+        c = OpmlToCsvConverter
     elif args.format.lower() == FORMAT_TASKPAPER:
-        c = CsvToTaskPaperConverter(args)
+        c = CsvToTaskPaperConverter
     else: 
-        c = CsvToMarkdownConverter(args)
-    c.convert()
+        c = CsvToMarkdownConverter
+
+    conv = c(args)    
+    conv.convert()
 
 def main():
     parser = argparse.ArgumentParser(

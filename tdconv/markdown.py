@@ -6,19 +6,16 @@ from __future__ import unicode_literals
 import codecs
 from string import Template
 
-from common import Converter
+from common import Converter, Downloadable
 
-class CsvToMarkdownConverter(Converter):
+
+class CsvToMarkdownConverter(Downloadable, Converter):
     """Convert CSV to Markdown."""
 
     ATTACHMENT_LINK = Template('[$name]($url)')
     IMAGE_LINK = Template('![$name]($url)')
     IMAGE_EXT = ['.jpg', '.jpeg', '.png', '.gif']
     TITLE = Template('# $title\n')
-
-    def __init__(self, args):
-        super(CsvToMarkdownConverter, self).__init__(args)
-        self.download_attachments = args.download
 
     def convert(self):
         with codecs.open(self.target_name(self.source_name, 'md'), 'w+', 'utf-8') as self.target:
