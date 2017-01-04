@@ -7,7 +7,7 @@ from argparse import Namespace
 from Tkinter import *
 import tkFileDialog
 
-from tdconv import convert
+from tdconv.tdconv import convert
 
 
 class App:
