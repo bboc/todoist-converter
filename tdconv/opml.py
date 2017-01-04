@@ -19,6 +19,7 @@ class OpmlConverter(Converter):
 class CsvToOpmlConverter(OpmlConverter):
     """Convert Todoist CSV to OPML."""
     OPML_IMAGE = Template('Image "$name": $url')
+    EXT = 'opml'
 
     def __init__(self, args):
         super(CsvToOpmlConverter, self).__init__(args)
@@ -27,7 +28,7 @@ class CsvToOpmlConverter(OpmlConverter):
         opml, self.parents = self._prepare_document()
         super(CsvToOpmlConverter, self).convert()
         tree = ET.ElementTree(opml)
-        tree.write(self.target_name(self.source_name, 'opml'), encoding='UTF-8', xml_declaration=True)
+        tree.write(self.target_name, encoding='UTF-8', xml_declaration=True)
 
     def _prepare_document(self):
         opml = ET.Element("opml", version='1.0')
@@ -60,13 +61,14 @@ class CsvToOpmlConverter(OpmlConverter):
 
 class OpmlToCsvConverter(OpmlConverter):
     """Convert OPML file to Todoist CSV."""
+    EXT = 'csv'
 
     def __init__(self, args):
         super(OpmlToCsvConverter, self).__init__(args)
 
     def convert(self):
         document_body = self._prepare_document()
-        with codecs.open(self.target_name(self.source_name, 'csv'), 'w+') as target:
+        with codecs.open(self.target_name, 'w+') as target:
             self.writer = UnicodeWriter(target, FIELDNAMES)
             self._write_header_row()
             for outline in document_body:

@@ -20,6 +20,8 @@ Download a [release from github](https://github.com/bboc/todoist-converter/relea
 
 Result will be written to the current folder.
 
+If an output file is specified with `--output` or `-o`, and the output file exists, TaskPaper and MD formats simply append to that file, so the output of multiple files can be combined into one file. 
+
 
 ## Migrating projects from Todoist to Taskpaper
 

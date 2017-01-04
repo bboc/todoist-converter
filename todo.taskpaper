@@ -11,7 +11,7 @@ todoist-converter:
 		- create a first release after making downloads optional @done
 		- Create a formula for homebrew, see for explanation http://jimkubicek.com/blog/2015/02/14/creating-a-homebrew-formula-for-a-python-project/ @medium
 	features:
-		- add commandline option for output file, append output of markdown and taskpaper to file if it exists
+		- add commandline option for output file, append output of markdown and taskpaper to file if it exists @done
 		- make download of attachments optional for TaskPaper and Markdown @done
 		- make gui and package as standalone app so more people can use it @large
 		- strip todoist IDs from filename and project name @done

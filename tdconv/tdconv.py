@@ -23,15 +23,17 @@ def convert(args):
     """
 
     if args.format.lower() == FORMAT_OPML:
-        c = CsvToOpmlConverter
+        klass = CsvToOpmlConverter
     elif args.format.lower() == FORMAT_CSV:
-        c = OpmlToCsvConverter
+        klass = OpmlToCsvConverter
     elif args.format.lower() == FORMAT_TASKPAPER:
-        c = CsvToTaskPaperConverter
+        klass = CsvToTaskPaperConverter
     else: 
-        c = CsvToMarkdownConverter
+        klass = CsvToMarkdownConverter
 
-    conv = c(args)    
+    conv = klass(args)    
+    if args.output:
+        conv.target_name = args.output
     conv.convert()
 
 def main():
@@ -45,6 +47,8 @@ def main():
                         help='increase level of verbosity (repeat up to 3 times)')
     parser.add_argument('--format', '-f', default='md',
                         help='format of target file: md, opml, todoist, taskpaper')
+    parser.add_argument('--output', '-o', default=None,
+                        help='name of target file, if this argument is not present, name of source file will be used')
     parser.add_argument('--download', '-d', action="store_true", default=False,
                         help='download attachments')
     parser.add_argument('file',

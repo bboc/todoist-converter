@@ -25,6 +25,7 @@ class Converter(object):
     def __init__(self, args):
         self.Row = namedtuple('Row', ', '.join(FIELDNAMES).lower())
         self.source_name = args.file
+        self.target_name = self.make_target_name(self.source_name)
     
     @staticmethod
     def title(filename):
@@ -36,9 +37,10 @@ class Converter(object):
             return match.group('title')
         return s
 
-    @staticmethod
-    def target_name(filename, ext):
+    def make_target_name(self, filename, ext=None):
         """Return target filename."""
+        if not ext:
+            ext = self.EXT
         try:
             return '.'.join((os.path.splitext(os.path.basename(filename))[0], ext))
         except UnicodeDecodeError:

@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 
+from argparse import Namespace
 import filecmp
-from tdconv.tdconv import convert
 import os
 import shutil
-import sys
 import tempfile
 import unittest
-from argparse import Namespace
 
+from tdconv.tdconv import convert
 
 def data_dir():
     """Directory of test files."""
@@ -42,7 +41,7 @@ class TodoistConverterTests(unittest.TestCase):
                 r = result.readlines()
                 self.assertEqual(c, r)
 
-    def compare_files(self, a,b):
+    def compare_files(self, a, b):
         self.assertTrue(filecmp.cmp(a, b, shallow=False))
 
     def _run_test_and_compare_results(self, args, output_name, result_file_name):
@@ -57,29 +56,29 @@ class BasicConverterTests(TodoistConverterTests):
         super(BasicConverterTests, self).setUp()
 
     def test_basic_conversion_to_md(self):
-        args = Namespace(file=self.file, format='md', download=False)
+        args = Namespace(file=self.file, format='md', download=False, output=None)
         self._run_test_and_compare_results(args, 'basic-test.md', 'basic-test--result.md')
 
     def test_basic_conversion_to_opml(self):
-        args = Namespace(file=self.file, format='opml')
+        args = Namespace(file=self.file, format='opml', output=None)
         self._run_test_and_compare_results(args,  'basic-test.opml', 'basic-test--result.opml')
 
 
 class UnicodeConverterTests(TodoistConverterTests):
     def test_basic_conversion_to_csv(self):
-        args = Namespace(file=make_path('basic-opml-test.opml'), format='todoist')
+        args = Namespace(file=make_path('basic-opml-test.opml'), format='todoist', output=None)
         self._run_test_and_compare_results(args, 'basic-opml-test.csv', 'basic-opml-test--result.csv')
 
     def test_unicode_conversion_to_md(self):
-        args = Namespace(file=make_path('unicode-and-quotes.csv'), format='md', download=True)
+        args = Namespace(file=make_path('unicode-and-quotes.csv'), format='md', download=True, output=None)
         self._run_test_and_compare_results(args, 'unicode-and-quotes.md', 'unicode-and-quotes--result.md')
     
     def test_unicode_conversion_to_opml(self):
-        args = Namespace(file=make_path('unicode-and-quotes.csv'), format='opml')
+        args = Namespace(file=make_path('unicode-and-quotes.csv'), format='opml', output=None)
         self._run_test_and_compare_results(args, 'unicode-and-quotes.opml', 'unicode-and-quotes--result.opml')
 
     def test_unicode_conversion_to_csv(self):
-        args = Namespace(file=make_path('unicode-opml.opml'), format='todoist')
+        args = Namespace(file=make_path('unicode-opml.opml'), format='todoist', output=None)
         self._run_test_and_compare_results(args,'unicode-opml.csv',
                                            'unicode-opml--result.csv')
 
@@ -90,21 +89,62 @@ class FullProjectConverterTests(TodoistConverterTests):
         super(FullProjectConverterTests, self).setUp()
 
     def test_conversion_to_md_with_download(self):
-        args = Namespace(file=self.file, format='md', download=True)
+        args = Namespace(file=self.file, format='md', download=True, output=None)
         self._run_test_and_compare_results(args, 'full-todoist-project.md',
                                                  'full-todoist-project--result-download.md')
 
     def test_conversion_to_md(self):
-        args = Namespace(file=self.file, format='md', download=False)
+        args = Namespace(file=self.file, format='md', download=False, output=None)
         self._run_test_and_compare_results(args,'full-todoist-project.md',
                                                 'full-todoist-project--result.md')
 
     def test_todoist_to_taskpaper(self):
-        args = Namespace(file=self.file, format='taskpaper', download=False)
+        args = Namespace(file=self.file, format='taskpaper', download=False, output=None)
         self._run_test_and_compare_results(args,'full-todoist-project.taskpaper',
                                                 'full-todoist-project--result.taskpaper')
     
     def test_todoist_to_taskpaper_with_download(self):
-        args = Namespace(file=self.file, format='taskpaper', download=True)
+        args = Namespace(file=self.file, format='taskpaper', download=True, output=None)
         self._run_test_and_compare_results(args, 'full-todoist-project.taskpaper',
                                                  'full-todoist-project--result-download.taskpaper')
+
+
+class OuptutFileTests(TodoistConverterTests):
+    def setUp(self):
+        self.file = make_path('basic-test.csv')
+        super(OuptutFileTests, self).setUp()
+
+    def _test_output_file(self, format, output, result):
+        args = Namespace(file=self.file, format=format, download=False, output=output)
+        self._run_test_and_compare_results(args, output, result)
+
+
+    def test_output_file_for_md(self):
+        self._test_output_file('md', 'my-special-name.md', 'basic-test--result.md')
+
+    def test_output_file_for_taskpaper(self):
+        self._test_output_file('taskpaper', 'my-special-name.taskpaper', 'basic-test--result.taskpaper')
+
+    def test_output_file_for_opml(self):
+        self._test_output_file('opml', 'my-special-name.opml', 'basic-test--result.opml')
+
+    def test_output_file_for_todoist(self):
+        output = 'foobar.csv'
+        args = Namespace(file=make_path('basic-opml-test.opml'), format='todoist', download=False, output=output)
+        self._run_test_and_compare_results(args, output, 'basic-opml-test--result.csv')
+
+    def _test_appending_output(self, output, format, result):
+        args = Namespace(file=self.file, format=format, download=False, output=output)
+        convert(args)
+        args = Namespace(file=self.file, format=format, download=False, output=output)
+        convert(args)
+        self._compare_results(os.path.join(self.results, output),
+                             make_path(result))
+
+    def test_output_of_two_files_to_md(self):
+        self._test_appending_output('combined-output.md', 'md', 'basic-test--result-combined.md')
+
+    def test_output_of_two_files_to_taskpaper(self):
+        self._test_appending_output('combined-output.taskpaper', 'taskpaper', 'basic-test--result-combined.taskpaper')
+
+

@@ -16,9 +16,10 @@ class CsvToMarkdownConverter(Downloadable, Converter):
     IMAGE_LINK = Template('![$name]($url)')
     IMAGE_EXT = ['.jpg', '.jpeg', '.png', '.gif']
     TITLE = Template('# $title\n')
+    EXT = 'md'
 
     def convert(self):
-        with codecs.open(self.target_name(self.source_name, 'md'), 'w+', 'utf-8') as self.target:
+        with codecs.open(self.target_name, 'a+', 'utf-8') as self.target:
             self._print(self.TITLE.substitute(title=self.title(self.source_name)))
             super(CsvToMarkdownConverter, self).convert()
             self._print('\n')

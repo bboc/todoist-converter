@@ -16,10 +16,11 @@ class CsvToTaskPaperConverter(Downloadable, Converter):
     TP_NOTE = Template('$indent$content')
     TP_TOP_PROJECT = Template('$title:')
     TP_UNCLICABLE_TASK_PREFIX = '* '
+    EXT = 'taskpaper'
 
     def convert(self):
         self.indent = 1
-        with codecs.open(self.target_name(self.source_name, 'taskpaper'), 'w+', 'utf-8') as self.target:
+        with codecs.open(self.target_name, 'a+', 'utf-8') as self.target:
             # Add file name as top level project (all tasks belong to that project)
             self._print(self.TP_TOP_PROJECT.substitute(title=self.title(self.source_name)))
             super(CsvToTaskPaperConverter, self).convert()
