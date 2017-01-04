@@ -4,6 +4,8 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 from argparse import Namespace
+import os
+
 from Tkinter import *
 import tkFileDialog
 
@@ -20,6 +22,8 @@ class App:
     ]
 
     def __init__(self, master):
+
+        master.title("todoist-converter v0.3")
 
         # source file 
         self.filename = StringVar()
@@ -103,6 +107,8 @@ class App:
 def main():
     root = Tk()
     app = App(root)
+
+    os.system('''/usr/bin/osascript -e 'tell app "Finder" to set frontmost of process "python" to true' ''')    
     root.mainloop()
     root.destroy()
 
