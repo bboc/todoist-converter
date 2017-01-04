@@ -13,7 +13,9 @@ todoist-converter:
 	features:
 		- add commandline option for output file, append output of markdown and taskpaper to file if it exists @done
 		- make download of attachments optional for TaskPaper and Markdown @done
-		- make gui and package as standalone app so more people can use it @large
+		- make gui @done
+		- add simple error handling and result message to gui 
+		- package as standalone app so more people can use it @large
 		- strip todoist IDs from filename and project name @done
 		- process an entire backup zip file @large
 
