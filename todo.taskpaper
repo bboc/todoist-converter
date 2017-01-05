@@ -1,12 +1,46 @@
 todoist-converter:
 	distribution:
 		- add license file @small
-		- Create a formula for homebrew, see for explanation http://jimkubicek.com/blog/2015/02/14/creating-a-homebrew-formula-for-a-python-project/ @medium
+		- Create a formula for homebrew, see for explanation http://jimkubicek.com/blog/2015/02/14/creating-a-homebrew-formula-for-a-python-project/ @medium @later
 	features:
-		- add simple error handling and result message to gui 
 		- add version number and info text to app @done(2017-01-05)
-		- process an entire backup zip file @large
-		- add app icon with pytinstaller --icon <FILE.ico or FILE.icns>
+		- process an entire backup zip file @medium
+		- process folder @small
+		- process one zip file or folder into one OPML file @medium
+	GUI:
+		- add simple error handling
+		- add "working..." and result message to gui
+		- add app icon with pyinstaller --icon <FILE.ico or FILE.icns>
+		New GUI Step 1:
+			- Tab: OPML file
+				- File to Convert: ____________
+				- Output Filename: _____________
+				- (x) CSV
+				- [ ] Download
+			- Tab: CSV file:
+				- File to Convert: ____________
+				- Output Filename: _____________
+				- ( ) Taskpaper ( ) OPML ( ) Markdown
+				- [ ] Download
+		New GUI Step 2:
+			- Todoist Backup (ZIP file)
+				- File to Convert: ____________
+				- ( ) Taskpaper ( ) Markdown
+				- [ ] Download
+				- [ ] Collect to one file
+		New GUI Step 3:
+			- Directory
+				- Directory to Convert: ____________
+				- process files: ( ) Todoist (CSV) ( ) OPML
+				- if Todoist: 
+					- [ ] Download
+					- ( ) Taskpaper ( ) OPML ( ) Markdown
+				- if target not OPML()
+					- [ ] Collect to one file
+
+
+other:
+	- get the modern tkinter book? http://www.tkdocs.com/tutorial/complex.html
 
 Archive:
 	- create python package tdconv @done @project(todoist-converter / code layout)
