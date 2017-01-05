@@ -41,6 +41,7 @@ todoist-converter:
 
 other:
 	- get the modern tkinter book? http://www.tkdocs.com/tutorial/complex.html
+	- remove the app from repo (add binary to github releases) @done(2017-01-05)
 
 Archive:
 	- create python package tdconv @done @project(todoist-converter / code layout)
