@@ -10,6 +10,9 @@ todoist-converter:
 		- process folder @small
 		- process one zip file or folder into one OPML file @medium
 		- convert opml to taskpaper and back (find out: what is a task, and what is an note, this should not be ambiguous, use taskpaper opml script, omnioutliner task paper export and carbon fin to test)
+		- process an entire backup zip file @medium
+		- process folder @small
+		- process one zip file or folder into one OPML file @medium
 	GUI:
 		- add simple error handling
 		- add "working..." and result message to gui
@@ -40,7 +43,6 @@ todoist-converter:
 					- ( ) Taskpaper ( ) OPML ( ) Markdown
 				- if target not OPML()
 					- [ ] Collect to one file
-
 
 other:
 	- get the modern tkinter book? http://www.tkdocs.com/tutorial/complex.html
