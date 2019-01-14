@@ -1,22 +1,46 @@
 todoist-converter:
 	distribution:
 		- add license file @small
-		- Create a formula for homebrew, see for explanation http://jimkubicek.com/blog/2015/02/14/creating-a-homebrew-formula-for-a-python-project/ @medium
+		- Create a formula for homebrew, see for explanation http://jimkubicek.com/blog/2015/02/14/creating-a-homebrew-formula-for-a-python-project/ @medium @later
+	fixes:
+		- opal to cdv does not write priority as int (empty string instead)
 	features:
-		- add simple error handling and result message to gui 
-		- add version number and info text to app @done(2017-01-05)
 		- process an entire backup zip file @large
 		- add app icon with pytinstaller --icon <FILE.ico or FILE.icns>
+		- process folder @small
+		- process one zip file or folder into one OPML file @medium
+		- convert opml to taskpaper and back (find out: what is a task, and what is an note, this should not be ambiguous, use taskpaper opml script, omnioutliner task paper export and carbon fin to test)
+	GUI:
+		- add simple error handling
+		- add "working..." and result message to gui
+		- add app icon with pyinstaller --icon <FILE.ico or FILE.icns>
+		New GUI Step 1:
+			- Tab: OPML file
+				- File to Convert: ____________
+				- Output Filename: _____________
+				- (x) CSV
+				- [ ] Download
+			- Tab: CSV file:
+				- File to Convert: ____________
+				- Output Filename: _____________
+				- ( ) Taskpaper ( ) OPML ( ) Markdown
+				- [ ] Download
+		New GUI Step 2:
+			- Todoist Backup (ZIP file)
+				- File to Convert: ____________
+				- ( ) Taskpaper ( ) Markdown
+				- [ ] Download
+				- [ ] Collect to one file
+		New GUI Step 3:
+			- Directory
+				- Directory to Convert: ____________
+				- process files: ( ) Todoist (CSV) ( ) OPML
+				- if Todoist: 
+					- [ ] Download
+					- ( ) Taskpaper ( ) OPML ( ) Markdown
+				- if target not OPML()
+					- [ ] Collect to one file
 
-Archive:
-	- create python package tdconv @done @project(todoist-converter / code layout)
-	- split code into common, taskpaper, converters and commandline code @done @project(todoist-converter / code layout)
-	- refactor taskpaper converter to oop code @done @project(todoist-converter / code layout)
-	- refactor processing of notes/attachments to oop code @done @project(todoist-converter / code layout)
-	- use namedtuple instead of dict for csv rows @done @project(todoist-converter / code layout)
-	- create a first release after making downloads optional @done @project(todoist-converter / distribution)
-	- add commandline option for output file, append output of markdown and taskpaper to file if it exists @done @project(todoist-converter / features)
-	- make download of attachments optional for TaskPaper and Markdown @done @project(todoist-converter / features)
-	- make gui @done @project(todoist-converter / features)
-	- package as standalone app so more people can use it @large @done(2017-01-05) @project(todoist-converter / features)
-	- strip todoist IDs from filename and project name @done @project(todoist-converter / features)
+
+other:
+	- get the modern tkinter book? http://www.tkdocs.com/tutorial/complex.html
