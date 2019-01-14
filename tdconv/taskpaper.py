@@ -44,7 +44,7 @@ class CsvToTaskPaperConverter(Downloadable, Converter):
 
     def _add_priority(self, row, content):
         """Add priority tag for prio 1-3."""
-        if int(row.priority) < 4: 
+        if row.priority != '' and int(row.priority) < 4: 
             content = ''.join((content, ' @priority(%s)' % row.priority))
         return content
 
