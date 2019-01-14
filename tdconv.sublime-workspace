@@ -1,0 +1,694 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"tra",
+				"translations"
+			],
+			[
+				"tr",
+				"translate"
+			],
+			[
+				"gr",
+				"group"
+			],
+			[
+				"s3",
+				"s3_patterns"
+			],
+			[
+				"Se",
+				"SECTION_PATTERNS"
+			],
+			[
+				"outp",
+				"output_file"
+			],
+			[
+				"ou",
+				"output_file"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "tdconv/common.py",
+			"settings":
+			{
+				"buffer_size": 2267,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 225.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 588.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/Users/beb/dev/todoist-converter",
+		"/Users/beb/dev/todoist-converter/tdconv"
+	],
+	"file_history":
+	[
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/defining-agreements/logbook.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/organizational-structure/delegate-circle.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/enablers-of-co-creation/adopt-the-seven-principles.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/defining-agreements/domain-description.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/closing.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/meeting-practices/meeting-evaluation.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/focussed-interactions/governance-meeting.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/organizational-structure/coordination-circle.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/organizational-structure/open-systems.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/organizational-structure/double-linked-hierarchy.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/organizational-structure/fractal-organization.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/organizational-structure/helping-team.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/organizational-structure/service-circle.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/building-organizations/nested-domains.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/organizational-structure/index.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/building-organizations/role.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/building-organizations/circle.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/building-organizations/index.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/building-organizations/domain.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/agreements/domain-description.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/organizing-work/limit-work-in-progress.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/organizing-work/align-flow.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/organizing-work/visualize-work.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/organizing-work/coordinator-role.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/organizing-work/continuous-improvement-of-work-process.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/organizing-work/prioritized-backlog.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/meeting-practices/governance-backlog.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/organizing-work/operations-backlog.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/meeting-practices/meeting-host.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/meeting-practices/meeting-facilitation.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/focussed-interactions/retrospective.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/focussed-interactions/daily-standup.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/focussed-interactions/planning-and-review-meetings.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/focussed-interactions/coordination-meeting.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/meeting-practices/rounds.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/agreements/evaluate-agreements.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/agreements/deliverables.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/agreements/evaluation-criteria.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/agreements/strategy.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/agreements/logbook.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/agreements/intended-outcome.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/enablers-of-co-creation/pull-system-for-organizational-change.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/enablers-of-co-creation/adapt-patterns-to-context.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/enablers-of-co-creation/support-roles.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/enablers-of-co-creation/bylaws.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/co-creation-and-evolution/those-affected-decide.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/co-creation-and-evolution/role-selection.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/peer-development/peer-feedback.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/peer-development/effectiveness-review.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/peer-development/development-plan.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/enablers-of-co-creation/artful-participation.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/enablers-of-co-creation/governance-facilitator.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/enablers-of-co-creation/be-the-change.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/peer-development/ask-for-help.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/co-creation-and-evolution/resolve-objections.md",
+		"/Users/beb/Dropbox/projects/S3/teaching/slides/2017 Hypothesengetriebene Agile Transitionen mit S3/01-basics.md",
+		"/Users/beb/Dropbox/projects/S3/teaching/slides/2017 Hypothesengetriebene Agile Transitionen mit S3/02-culture.md",
+		"/Users/beb/Dropbox/projects/S3/teaching/slides/2017 Hypothesengetriebene Agile Transitionen mit S3/03-implementation.md",
+		"/Users/beb/Dropbox/projects/S3/teaching/slides/2017 Hypothesengetriebene Agile Transitionen mit S3/einleitungen-to-check.md",
+		"/Users/beb/Dropbox/projects/S3/teaching/illustrations/img/official-s3/general/history.png",
+		"/Users/beb/Dropbox/projects/S3/teaching/slides/2017 Hypothesengetriebene Agile Transitionen mit S3/slides.md",
+		"/Users/beb/Dropbox/projects/S3/teaching/slides/2017 Hypothesengetriebene Agile Transitionen mit S3/00-master.md",
+		"/Users/beb/Dropbox/projects/S3/teaching/slides/2017 Hypothesengetriebene Agile Transitionen mit S3/build.sh",
+		"/Users/beb/Dropbox/projects/S3/teaching/slides/2017 Hypothesengetriebene Agile Transitionen mit S3/00c-presentation-body.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/title.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/co-creation-and-evolution/driver.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/deckset_template.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/enablers-of-co-creation/breaking-agreements.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/enablers-of-co-creation/open-s3-adoption.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/enablers-of-co-creation/pull-in-S3.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/co-creation-and-evolution/driver-mapping-new.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/co-creation-and-evolution/driver-mapping.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/enablers-of-co-creation/contracting-and-accountability.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/enablers-of-co-creation/Accountability And Contracting-new.mdown",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/enablers-of-co-creation/agree-on-values.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/enablers-of-co-creation/transparent-salary.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/organizational-structure/peach-organization.md",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/organizational-structure/backbone-organization.md",
+		"/Users/beb/dev/todoist-converter/tdconv/app.py",
+		"/Users/beb/dev/todoist-converter/test.py",
+		"/Users/beb/dev/todoist-converter/setup.py",
+		"/Users/beb/dev/todoist-converter/tdconv/markdown.py",
+		"/Users/beb/dev/todoist-converter/tdconv/gui.py",
+		"/Users/beb/Dropbox/projects/S3/s3-patterns/src/co-creation-and-evolution/objections.md",
+		"/Users/beb/Dropbox/projects/S3/ebooks/s3-handout-beb/objections.md",
+		"/Users/beb/dev/todoist-converter/tdconv_tests.py",
+		"/Users/beb/dev/todoist-converter/README.md",
+		"/Users/beb/dev/todoist-converter/todo.taskpaper",
+		"/Users/beb/dev/todoist-converter/tdconv/opml.py",
+		"/Users/beb/dev/todoist-converter/tdconv/taskpaper.py",
+		"/Users/beb/dev/todoist-converter/tdconv/common.py",
+		"/Users/beb/dev/todoist-converter/foobar.taskpaper",
+		"/Users/beb/dev/todoist-converter/tdconv/tdconv.py"
+	],
+	"find":
+	{
+		"height": 23.0
+	},
+	"find_in_files":
+	{
+		"height": 95.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"accting",
+			"people-and",
+			"(s)",
+			"subset circle",
+			"/s",
+			"/s ",
+			"/s",
+			"make sure",
+			"tension",
+			"make sure",
+			"culture",
+			"ground",
+			"back",
+			"-background",
+			"bd=",
+			"args",
+			"qualify",
+			"_test_output_file",
+			"print(",
+			"target_name",
+			", ,",
+			"')\n"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"background",
+			"background="
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "tdconv/common.py",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 2267,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1464,
+								1524
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 218.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 33.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "tdconv.sublime-project",
+	"replace":
+	{
+		"height": 42.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"resol",
+				"co-creation-and-evolution/resolve-objections.md"
+			],
+			[
+				"princ",
+				"enablers-of-co-creation/adopt-the-seven-principles.md"
+			],
+			[
+				"back",
+				"organizational-structure/backbone-organization.md"
+			],
+			[
+				"fra",
+				"organizational-structure/fractal-organization.md"
+			],
+			[
+				"na",
+				"co-creation-and-evolution/navigating-via-tension.md"
+			],
+			[
+				"naviga",
+				"co-creation-and-evolution/navigating-via-tension.md"
+			],
+			[
+				"qual",
+				"co-creation-and-evolution/qualifying-organizational-drivers.md"
+			],
+			[
+				"evalu",
+				"meeting-practices/meeting-evaluation.md"
+			],
+			[
+				"tran",
+				"enablers-of-co-creation/transparent-salary.md"
+			],
+			[
+				"agree",
+				"enablers-of-co-creation/agree-on-values.md"
+			],
+			[
+				"domain",
+				"defining-agreements/domain-description.md"
+			],
+			[
+				"ado",
+				"enablers-of-co-creation/adopt-the-seven-principles.md"
+			],
+			[
+				"driver",
+				"co-creation-and-evolution/driver.md"
+			],
+			[
+				"circ",
+				"building-organizations/circle.md"
+			],
+			[
+				"align",
+				"organizing-work/align-flow.md"
+			],
+			[
+				"nest",
+				"building-organizations/nested-domains.md"
+			],
+			[
+				"domaindes",
+				"agreements/domain-description.md"
+			],
+			[
+				"open",
+				"organizational-structure/open-systems.md"
+			],
+			[
+				"frac",
+				"organizational-structure/fractal-organization.md"
+			],
+			[
+				"dou",
+				"organizational-structure/double-linked-hierarchy.md"
+			],
+			[
+				"coor",
+				"organizational-structure/coordination-circle.md"
+			],
+			[
+				"helpi",
+				"organizational-structure/helping-team.md"
+			],
+			[
+				"servi",
+				"organizational-structure/service-circle.md"
+			],
+			[
+				"dele",
+				"organizational-structure/delegate-circle.md"
+			],
+			[
+				"inde",
+				"organizational-structure/index.md"
+			],
+			[
+				"role",
+				"building-organizations/role.md"
+			],
+			[
+				"cire",
+				"building-organizations/circle.md"
+			],
+			[
+				"circl",
+				"building-organizations/circle.md"
+			],
+			[
+				"nes",
+				"building-organizations/nested-domains.md"
+			],
+			[
+				"do",
+				"agreements/domain-description.md"
+			],
+			[
+				"dom",
+				"building-organizations/domain.md"
+			],
+			[
+				"coo",
+				"organizing-work/coordinator-role.md"
+			],
+			[
+				"con",
+				"organizing-work/continuous-improvement-of-work-process.md"
+			],
+			[
+				"limi",
+				"organizing-work/limit-work-in-progress.md"
+			],
+			[
+				"visu",
+				"organizing-work/visualize-work.md"
+			],
+			[
+				"prio",
+				"organizing-work/prioritized-backlog.md"
+			],
+			[
+				"gov",
+				"meeting-practices/governance-backlog.md"
+			],
+			[
+				"oper",
+				"organizing-work/operations-backlog.md"
+			],
+			[
+				"opera",
+				"organizing-work/operations-backlog.md"
+			],
+			[
+				"vis",
+				"organizing-work/visualize-work.md"
+			],
+			[
+				"gover",
+				"meeting-practices/governance-backlog.md"
+			],
+			[
+				"meetin",
+				"meeting-practices/meeting-host.md"
+			],
+			[
+				"evaluatio",
+				"meeting-practices/meeting-evaluation.md"
+			],
+			[
+				"goe",
+				"focussed-interactions/governance-meeting.md"
+			],
+			[
+				"mee",
+				"meeting-practices/meeting-facilitation.md"
+			],
+			[
+				"rou",
+				"meeting-practices/rounds.md"
+			],
+			[
+				"pla",
+				"focussed-interactions/planning-and-review-meetings.md"
+			],
+			[
+				"daily",
+				"focussed-interactions/daily-standup.md"
+			],
+			[
+				"retrosp",
+				"focussed-interactions/retrospective.md"
+			],
+			[
+				"eval",
+				"agreements/evaluate-agreements.md"
+			],
+			[
+				"deli",
+				"agreements/deliverables.md"
+			],
+			[
+				"inted",
+				"agreements/intended-outcome.md"
+			],
+			[
+				"log",
+				"agreements/logbook.md"
+			],
+			[
+				"stra",
+				"agreements/strategy.md"
+			],
+			[
+				"pull",
+				"enablers-of-co-creation/pull-system-for-organizational-change.md"
+			],
+			[
+				"byl",
+				"enablers-of-co-creation/bylaws.md"
+			],
+			[
+				"supp",
+				"enablers-of-co-creation/support-roles.md"
+			],
+			[
+				"ada",
+				"enablers-of-co-creation/adapt-patterns-to-context.md"
+			],
+			[
+				"adop",
+				"enablers-of-co-creation/adopt-the-seven-principles.md"
+			],
+			[
+				"bethe",
+				"enablers-of-co-creation/be-the-change.md"
+			],
+			[
+				"art",
+				"enablers-of-co-creation/artful-participation.md"
+			],
+			[
+				"devel",
+				"peer-development/development-plan.md"
+			],
+			[
+				"effec",
+				"peer-development/effectiveness-review.md"
+			],
+			[
+				"peer",
+				"peer-development/peer-feedback.md"
+			],
+			[
+				"ask",
+				"peer-development/ask-for-help.md"
+			],
+			[
+				"thos",
+				"co-creation-and-evolution/those-affected-decide.md"
+			],
+			[
+				"cinsen",
+				"co-creation-and-evolution/consent-decision-making.md"
+			],
+			[
+				"rop",
+				"co-creation-and-evolution/proposal-forming.md"
+			],
+			[
+				"navi",
+				"co-creation-and-evolution/navigating-via-tension.md"
+			],
+			[
+				"obj",
+				"co-creation-and-evolution/objections.md"
+			],
+			[
+				"bre",
+				"enablers-of-co-creation/breaking-agreements.md"
+			],
+			[
+				"contu",
+				"organizing-work/continuous-improvement-of-work-process.md"
+			],
+			[
+				"drive",
+				"co-creation-and-evolution/driver-mapping-new.md"
+			],
+			[
+				"adap",
+				"enablers-of-co-creation/adapt-patterns-to-context.md"
+			],
+			[
+				"value",
+				"enablers-of-co-creation/agree-on-values.md"
+			],
+			[
+				"seve",
+				"enablers-of-co-creation/adopt-the-seven-principles.md"
+			],
+			[
+				"peach",
+				"organizational-structure/peach-organization.md"
+			],
+			[
+				"serv",
+				"organizational-structure/service-circle.md"
+			],
+			[
+				"he",
+				"organizational-structure/helping-team.md"
+			],
+			[
+				"test",
+				"tdconv_tests.py"
+			],
+			[
+				"rea",
+				"README.md"
+			],
+			[
+				"todo",
+				"todo.taskpaper"
+			],
+			[
+				"taskpa",
+				"foobar.taskpaper"
+			],
+			[
+				"comm",
+				"tdconv/common.py"
+			],
+			[
+				"opm",
+				"tdconv/opml.py"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 345.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
