@@ -16,9 +16,15 @@ Download a [release on github](https://github.com/bboc/todoist-converter/release
 
 ### Setup
 
-Download a [release from github](https://github.com/bboc/todoist-converter/releases) or clone the repository, then set it up via 
+Download a [release from github](https://github.com/bboc/todoist-converter/releases) or clone the repository, then set it up for usage via 
 
-`python setup.py`
+`python setup.py install`
+
+or for development with
+
+`python setup.py install`
+
+You might want to set up a virtual environment before you do that.
 
 
 ### Usage
