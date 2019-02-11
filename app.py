@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 
 from argparse import Namespace
 import os
+import sys
 
 from tkinter import (
     Tk,
@@ -25,6 +26,7 @@ import tkFileDialog
 from tdconv.tdconv import convert
 import logging
 import queue
+import traceback
 
 logger = logging.getLogger("tdconv")
 
@@ -129,7 +131,14 @@ class App:
                          format=self.format.get(),
                          output=self.output_file.get(),
                          download=self.download.get())
-        convert(args)
+        try:
+            convert(args)
+        except Exception:
+            tb = traceback.format_exc()
+            logger.error(tb)
+        else:
+            logger.info("conversion finished")
+        logger.info("ready")
 
 
 class QueueHandler(logging.Handler):
