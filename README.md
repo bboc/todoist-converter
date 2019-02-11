@@ -11,6 +11,7 @@ Todoist note attachments are either referenced via URL, or optionally downloaded
 
 Download a [release on github](https://github.com/bboc/todoist-converter/releases/latest)
 
+take a look at the [changelog](#changelog)
 
 ## tdconv command
 
@@ -67,3 +68,22 @@ Because Todoist cannot export mulitple projects to one file, each Taskpaper file
 ## Notes
 
 Import of generated CSV tested with Todoist on OS-X version 715.
+
+## Changelog
+
+The format of the changelog is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+### 0.4
+
+- **added**: App now outputs parameters and output directory before conversion
+- **fixed**: App tests for existence of input file before conversion
+- **added**: App displays error information
+- **added**: App icon
+- **added**: makefile with commands for building release and debug apps
+- **fixed**: fixed a bug in taskpaper export where empty priority in a task would result in an exception
+
+### 0.3
+
+- **added**: MacOS App with a very simple GUI
+- **added**: added `--output`, md and taskpaper formats append output if file is present
