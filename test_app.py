@@ -3,14 +3,10 @@
 from __future__ import print_function
 from __future__ import unicode_literals
 
-from argparse import Namespace
 import os
 
 import ttk
 import Tkinter
-import tkFileDialog
-
-from tdconv.tdconv import convert
 
 
 class TestApp(object):

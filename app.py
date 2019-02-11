@@ -25,7 +25,7 @@ class App:
 
         master.title("todoist-converter v0.3")
 
-        # source file 
+        # source file
         self.filename = StringVar()
         source_frame = Frame(master)
         source_frame.pack(anchor=NW)
@@ -63,14 +63,14 @@ class App:
         # download attachments
         self.download = IntVar()
         download_frame = Frame(master)
-        download_frame.pack(anchor=NW)        
+        download_frame.pack(anchor=NW)
         self.checkbox_download = Checkbutton(download_frame, text="Download Attachments?", variable=self.download)
         self.checkbox_download.pack(side=LEFT)
 
         # separator
         Frame(height=2, bd=1, relief=SUNKEN).pack(fill=X, padx=5, pady=5)
 
-        #buttons: convert, quit
+        # buttons: convert, quit
         buttons_frame = Frame(master)
         buttons_frame.pack(anchor=NW, fill=X)
         self.button_quit = Button(buttons_frame, text="Quit", fg="red", command=master.quit)
@@ -79,27 +79,25 @@ class App:
         self.button_convert.pack(anchor=NE)
 
     def cb_select_file(self):
-        filename = tkFileDialog.askopenfilename(initialdir = ".", 
-                                                title = "Select file",
+        filename = tkFileDialog.askopenfilename(initialdir=".",
+                                                title="Select file",
                                                 defaultextension='*.csv',
-                                                filetypes = (("Todoist Files", "*.csv"),
-                                                             ("OPML Files", "*.opml"),
-                                                             ("all files","*.*")))
+                                                filetypes=(("Todoist Files", "*.csv"),
+                                                           ("OPML Files", "*.opml"),
+                                                           ("all files", "*.*")))
         print(filename)
         self.filename.set(filename)
 
-
     def convert(self):
-
         # TODO: warn if filename not set
         print("format", self.format.get())
         print("download", self.download.get())
         print("source", self.filename.get())
         print("target", self.output_file.get())
 
-        args = Namespace(file=self.filename.get(), 
-                         format=self.format.get(), 
-                         output=self.output_file.get(), 
+        args = Namespace(file=self.filename.get(),
+                         format=self.format.get(),
+                         output=self.output_file.get(),
                          download=self.download.get())
         convert(args)
 
@@ -107,10 +105,10 @@ class App:
 def main():
     root = Tk()
     app = App(root)
-
-    os.system('''/usr/bin/osascript -e 'tell app "Finder" to set frontmost of process "python" to true' ''')    
+    os.system('''/usr/bin/osascript -e 'tell app "Finder" to set frontmost of process "python" to true' ''')
     root.mainloop()
     root.destroy()
+
 
 if __name__ == "__main__":
     main()
