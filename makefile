@@ -1,9 +1,9 @@
 app:
-	pyinstaller --onefile --name todoist-converter --windowed app.py
+	pyinstaller --onefile --log-level WARN --name todoist-converter --windowed app.py
 debug:
 	-rm -r dist/todoist-converter-debug.app
 	-rm dist/todoist-converter-debug
-	pyinstaller --onefile --name todoist-converter-debug --debug all --windowed app.py
+	pyinstaller --onefile --log-level WARN --name todoist-converter-debug --debug all --windowed app.py
 	open dist/todoist-converter-debug 
 test:
 	nosetests
