@@ -42,7 +42,7 @@ class App:
 
     def __init__(self, master):
 
-        master.title("todoist-converter v0.3")
+        master.title("todoist-converter v0.4")
 
         # source file
         self.filename = StringVar()
