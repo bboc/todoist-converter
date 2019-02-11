@@ -110,18 +110,25 @@ class App:
         self.filename.set(filename)
 
     def convert(self):
-        # TODO: warn if filename not set
-        print("format", self.format.get())
-        print("download", self.download.get())
-        print("source", self.filename.get())
-        print("target", self.output_file.get())
+        source = self.filename.get()
+        if not source:
+            logger.error("No source file set!!")
+            return
+        elif not os.path.exists(source):
+            logger.error("source '%s' does not exist!" % source)
+            return
+        logger.setLevel('INFO')
+        logger.info("starting conversion...")
+        logger.info("source: %s" % source)
+        logger.info("target: %s" % self.output_file.get())
+        logger.info("format: %s" % self.format.get())
+        logger.info("download attachments: %s" % self.download.get())
+        logger.info("output folder: %s" % os.getcwd())
 
-        args = Namespace(file=self.filename.get(),
+        args = Namespace(file=source,
                          format=self.format.get(),
                          output=self.output_file.get(),
                          download=self.download.get())
-        logger.warning("converting with %s" % repr(args))
-        logger.debug(os.getcwd())
         convert(args)
 
 
@@ -155,7 +162,7 @@ class ConsoleUi:
         # Create a logging handler using a queue
         self.log_queue = queue.Queue()
         self.queue_handler = QueueHandler(self.log_queue)
-        formatter = logging.Formatter('%(asctime)s: %(message)s')
+        formatter = logging.Formatter('%(message)s')
         self.queue_handler.setFormatter(formatter)
         logger.addHandler(self.queue_handler)
         # Start polling messages from the queue
