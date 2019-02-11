@@ -25,7 +25,7 @@ class CsvToTaskPaperConverter(Downloadable, Converter):
             self._print(self.TP_TOP_PROJECT.substitute(title=self.title(self.source_name)))
             super(CsvToTaskPaperConverter, self).convert()
             self._print('\n')
-    
+
     def process_task(self, row):
         """Convert one task to TaskPaper."""
         content = row.content
@@ -40,11 +40,11 @@ class CsvToTaskPaperConverter(Downloadable, Converter):
         content = self._add_due_date(row, content)
         content = self._clean_tags(row, content)
         self.indent = int(row.indent)
-        self._print(tpl.substitute(indent = '\t' * (int(row.indent)), content=content))
+        self._print(tpl.substitute(indent='\t' * (int(row.indent)), content=content))
 
     def _add_priority(self, row, content):
         """Add priority tag for prio 1-3."""
-        if row.priority != '' and int(row.priority) < 4: 
+        if row.priority != '' and int(row.priority) < 4:
             content = ''.join((content, ' @priority(%s)' % row.priority))
         return content
 
@@ -58,10 +58,9 @@ class CsvToTaskPaperConverter(Downloadable, Converter):
         """Taskpaper does not like tags starting with '@/'."""
         return content.replace('@/', '@')
 
-
     def process_note(self, note):
         """Convert one note to TaskPaper."""
-        tabs = '\t' * (self.indent + 1) # notes need an additional level of indentation
+        tabs = '\t' * (self.indent + 1)  # notes need an additional level of indentation
         self._process_note_text(note.text, tabs)
         self._process_note_attachment(note.attachment, tabs)
 

@@ -28,18 +28,19 @@ def convert(args):
         klass = OpmlToCsvConverter
     elif args.format.lower() == FORMAT_TASKPAPER:
         klass = CsvToTaskPaperConverter
-    else: 
+    else:
         klass = CsvToMarkdownConverter
 
-    conv = klass(args)    
+    conv = klass(args)
     if args.output:
         conv.target_name = args.output
     conv.convert()
 
+
 def main():
     parser = argparse.ArgumentParser(
         description=dedent("""Convert Todoist template files (and Todoist backups) to other formats.
-            To convert an entire backup use 
+            To convert an entire backup use
             ls -bp | xargs -I xx tdconv -df taskpaper "xx"
             """))
 
@@ -53,6 +54,6 @@ def main():
                         help='download attachments')
     parser.add_argument('file',
                         help='file to convert')
-    
+
     args = parser.parse_args()
     convert(args)

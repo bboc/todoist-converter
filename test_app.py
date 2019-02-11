@@ -19,7 +19,6 @@ class TestApp(object):
             # separator
         ttk.Separator(master, orient=Tkinter.HORIZONTAL).pack()
 
-        
         p = ttk.Panedwindow(master, orient=Tkinter.VERTICAL)
         p.pack()
         # first pane, which would get widgets gridded into it:
@@ -30,15 +29,14 @@ class TestApp(object):
         p.pack()
 
 
-
-
 def main():
     root = Tkinter.Tk()
     app = TestApp(root)
 
-    os.system('''/usr/bin/osascript -e 'tell app "Finder" to set frontmost of process "python" to true' ''')    
+    os.system('''/usr/bin/osascript -e 'tell app "Finder" to set frontmost of process "python" to true' ''')
     root.mainloop()
     root.destroy()
+
 
 if __name__ == "__main__":
     main()

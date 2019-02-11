@@ -1,6 +1,9 @@
 """UnicodeReader and UnicodeWriter for CSV as described in the Python documentation."""
 
-import csv, codecs, cStringIO
+import csv
+import codecs
+import cStringIO
+
 
 class UTF8Recoder:
     """
@@ -14,6 +17,7 @@ class UTF8Recoder:
 
     def next(self):
         return self.reader.next().encode("utf-8")
+
 
 class UnicodeReader:
     """
@@ -31,6 +35,7 @@ class UnicodeReader:
 
     def __iter__(self):
         return self
+
 
 class UnicodeWriter:
     """

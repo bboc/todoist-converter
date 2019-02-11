@@ -11,6 +11,7 @@ import xml.etree.cElementTree as ET
 from common import Converter
 from const import FIELDNAMES
 
+
 class OpmlConverter(Converter):
     # OPML attribute for note
     NOTE_ATTRIB = '_note'
@@ -42,18 +43,18 @@ class CsvToOpmlConverter(OpmlConverter):
 
     def process_task(self, row):
         level = int(row.indent)
-        self.current = ET.SubElement(self.parents[level-1], 'outline', text=row.content)
+        self.current = ET.SubElement(self.parents[level - 1], 'outline', text=row.content)
         self.parents[level] = self.current
 
     def process_note(self, note):
         if note.text:
             self._opml_append_note(note.text)
-        if note.attachment: 
+        if note.attachment:
             self._opml_append_note(self.OPML_IMAGE.substitute(name=note.attachment.name, url=note.attachment.url))
 
     def _opml_append_note(self, contents):
         note = self.current.get(self.NOTE_ATTRIB)
-        if note: 
+        if note:
             self.current.set(self.NOTE_ATTRIB, '\n\n'.join((note, contents)))
         else:
             self.current.set(self.NOTE_ATTRIB, contents)
@@ -82,7 +83,7 @@ class OpmlToCsvConverter(OpmlConverter):
     def _write_header_row(self):
         self.writer.writerow(FIELDNAMES)
 
-    def _make_row(self, type='', content='', indent = ''):
+    def _make_row(self, type='', content='', indent=''):
         return [type, content, '', indent, '', '', '', '', '']
 
     def process_element(self, outline, level=1):
@@ -97,6 +98,4 @@ class OpmlToCsvConverter(OpmlConverter):
         # separator
         self.writer.writerow(self._make_row())
         for subelement in outline.findall('outline'):
-            self.process_element(subelement, level+1)
-
-
+            self.process_element(subelement, level + 1)

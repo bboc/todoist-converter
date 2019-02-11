@@ -23,15 +23,14 @@ class CsvToMarkdownConverter(Downloadable, Converter):
             self._print(self.TITLE.substitute(title=self.title(self.source_name)))
             super(CsvToMarkdownConverter, self).convert()
             self._print('\n')
-    
+
     def process_task(self, row):
-        self._print('#' * (int(row.indent)+1), row.content, '\n')
+        self._print('#' * (int(row.indent) + 1), row.content, '\n')
 
     def process_note(self, note):
         if note.text:
             self._print(note.text, '\n')
         self._process_note_attachment(note.attachment)
-
 
     def _process_note_attachment(self, attachment):
         if attachment:
@@ -40,7 +39,7 @@ class CsvToMarkdownConverter(Downloadable, Converter):
             else:
                 url = attachment.url
             self._attachment_reference(attachment.name, url)
-    
+
     def _attachment_reference(self, name, url):
         """
         Determine if attachment is an image, if so, create image reference,
