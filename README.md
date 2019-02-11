@@ -22,9 +22,11 @@ Download a [release from github](https://github.com/bboc/todoist-converter/relea
 
 or for development with
 
-`python setup.py install`
+`make develop`
 
 You might want to set up a virtual environment before you do that.
+
+There's a makefile with several commands that help you building and debugging the Application with [pyinstaller](https://pyinstaller.org)
 
 
 ### Usage
