@@ -15,6 +15,7 @@ from unicode_csv import UnicodeReader
 
 from note import Note
 
+
 class Converter(object):
 
     TYPE_TASK = 'task'
@@ -26,7 +27,7 @@ class Converter(object):
         self.Row = namedtuple('Row', ', '.join(FIELDNAMES).lower())
         self.source_name = args.file
         self.target_name = self.make_target_name(self.source_name)
-    
+
     @staticmethod
     def title(filename):
         """Extract title from filename. Remove Todoist Id"""
@@ -48,7 +49,7 @@ class Converter(object):
 
     def convert(self):
         """
-        Should be overridden in subclasses. Subclasses need to implement 
+        Should be overridden in subclasses. Subclasses need to implement
         process_task(row) and process_note(note).
         """
         with codecs.open(self.source_name, 'r') as csvfile:
@@ -67,7 +68,6 @@ class Downloadable(object):
     def __init__(self, args):
         super(Downloadable, self).__init__(args)
         self.download_attachments = args.download
-
 
 
 class ZipProcessor(object):
