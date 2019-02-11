@@ -1,1 +1,0 @@
-pyinstaller --onefile --windowed app.py
