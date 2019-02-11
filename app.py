@@ -95,6 +95,10 @@ class App:
         self.button_convert = Button(buttons_frame, text="Convert", command=self.convert)
         self.button_convert.pack(anchor=NE)
 
+        logger_frame = Frame(master)
+        logger_frame.pack(anchor=NW, fill=X)
+        self.console = ConsoleUi(logger_frame)
+
     def cb_select_file(self):
         filename = tkFileDialog.askopenfilename(initialdir=".",
                                                 title="Select file",
