@@ -6,10 +6,27 @@ from __future__ import unicode_literals
 from argparse import Namespace
 import os
 
-from Tkinter import *
+from tkinter import (
+    Tk,
+    Button,
+    Entry,
+    Frame,
+    Label,
+    StringVar,
+    Radiobutton,
+    Checkbutton,
+    IntVar,
+    N, NW, NE, S, E, W,
+    X, LEFT, SUNKEN, END,
+)
+from tkinter.scrolledtext import ScrolledText
 import tkFileDialog
 
 from tdconv.tdconv import convert
+import logging
+import queue
+
+logger = logging.getLogger("tdconv")
 
 
 class App:
