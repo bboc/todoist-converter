@@ -38,12 +38,14 @@ CSV = 'csv'
 
 class App:
 
-    AVAILABLE_FORMATS = [
-        ("TaskPaper", "taskpaper"),
-        ("OPML", "opml"),
-        ("Markdown", "md"),
-        ("Todoist (CSV)", "todoist"),
-    ]
+    FMT_TASKPAPER = ("TaskPaper", "taskpaper")
+    FMT_OPML = ("OPML", "opml")
+    FMT_MD = ("Markdown", "md")
+    FMT_CSV = ("Todoist (CSV)", "todoist")
+
+    FROM_CSV = (FMT_TASKPAPER, FMT_OPML, FMT_MD)
+    FROM_OPML = (FMT_CSV,)
+    FROM_ZIP = (FMT_TASKPAPER, FMT_OPML, FMT_MD)
 
     def __init__(self, master):
 
@@ -85,13 +87,9 @@ class App:
 
         # file format
         self.format = StringVar()
-        self.format.set("taskpaper")
-        format_frame = Frame(master)
-        format_frame.pack(anchor=NW)
-        Label(format_frame, text="Convert to: ").pack(side=LEFT)
-        for text, mode in self.AVAILABLE_FORMATS:
-            self.select_format = Radiobutton(format_frame, text=text, variable=self.format, value=mode)
-            self.select_format.pack(side=LEFT)
+        self.format_frame = Frame(master)
+        self.format_frame.pack(anchor=NW)
+        self.make_format_frame(self.FMT_TASKPAPER[1], self.FROM_CSV)
 
         # separator
         Frame(height=2, bd=1, relief=SUNKEN).pack(fill=X, padx=5, pady=5)
@@ -121,17 +119,33 @@ class App:
         logger_frame.pack(anchor=NW, fill=X)
         self.console = ConsoleUi(logger_frame)
 
+    def make_format_frame(self, default, available_formats):
+        """Set available output formats."""
+
+        # destroy all widgets of frame
+        for widget in self.format_frame.winfo_children():
+            widget.destroy()
+
+        self.format.set(default)
+        Label(self.format_frame, text="Convert to: ").pack(side=LEFT)
+        for text, mode in available_formats:
+            self.select_format = Radiobutton(self.format_frame, text=text, variable=self.format, value=mode)
+            self.select_format.pack(side=LEFT)
+
     def cb_source_file_changed(self, source):
         """Determine what kind of source file is selected."""
 
         name = source.get()
-        if name.lower().endswith('opml'):
-            self.source_type = OPML
 
+        if name.lower().endswith('csv'):
+            self.source_type = CSV
+            self.make_format_frame(self.FMT_TASKPAPER[1], self.FROM_CSV)
+        elif name.lower().endswith('opml'):
+            self.source_type = OPML
+            self.make_format_frame(self.FMT_CSV[1], self.FROM_OPML)
         elif name.lower().endswith('zip'):
             self.source_type = ZIP
-        elif name.lower().endswith('csv'):
-            self.source_type = CSV
+            self.make_format_frame(self.FMT_TASKPAPER[1], self.FROM_ZIP)
         else:
             self.source_type = None
 
