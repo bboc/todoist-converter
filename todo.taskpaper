@@ -17,6 +17,8 @@ todoist-converter:
 	GUI Redesign:
 		Make GUI dynamic dependent on input (todoist CSV, Todoist Backup (ZIP), OPML, Directory): after file selection, change selection and enable/disable sections.
 			
+		- check if it's possible to get rid of some of the frames
+		- collect all info from dir tab and hand over to tdconv @na
 		- Add two tabs (one for folders, one for files), which also include the convert button, but NOT the output area.
 		- add separator or title to output area and make it extend with the window @done
 		Files Tab:
@@ -31,11 +33,11 @@ todoist-converter:
 				- Output Format: (x) Taskpaper ( ) Markdown @done
 				- [ ] Collect to one file
 		Directory Tab:
-			- Directory to Convert: ____________
-			- Files to process: ( ) Todoist (CSV) ( ) OPML
-			- if Todoist: 
-				- [ ] Download
-				- ( ) Taskpaper ( ) OPML ( ) Markdown
+			- Directory to Convert: ____________ @done
+			- Files to process: ( ) Todoist (CSV) ( ) OPML @done
+			- if Todoist: @done
+				- [ ] Download @done
+				- ( ) Taskpaper ( ) OPML ( ) Markdown @done
 			- if target not OPML()
 				- [ ] Collect to one file
 

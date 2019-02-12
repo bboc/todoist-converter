@@ -31,7 +31,7 @@ from tkinter import (
     Checkbutton,
     IntVar,
     N, NW, NE, S, E, W,
-    X, LEFT, RIGHT, BOTH, SUNKEN, END,
+    X, LEFT, RIGHT, BOTH, END,
 )
 from tkinter.scrolledtext import ScrolledText
 import ttk
@@ -58,6 +58,8 @@ class App:
     FROM_OPML = (FMT_CSV,)
     FROM_ZIP = (FMT_TASKPAPER, FMT_OPML, FMT_MD)
 
+    DIR_SOURCE_FORMATS = (FMT_CSV, FMT_OPML)
+
     def __init__(self, master):
 
         self.source_type = None
@@ -66,47 +68,21 @@ class App:
     def build_gui(self, master):
         master.title("todoist converter v0.4")
 
-        # source file
-        self.filename = StringVar()
-        self.filename.trace("w", lambda name, index, mode, source=self.filename: self.cb_source_file_changed(source))
-
-        source_frame = Frame(master)
-        source_frame.pack(anchor=NW, padx=10, pady=10)
-        Label(source_frame, text="File to convert (CSV or OPML):").pack(side=LEFT)
-        Entry(source_frame, text="foobar", textvariable=self.filename).pack(side=LEFT)
-        Button(source_frame, text="Select File", command=self.cb_select_file).pack(side=LEFT)
-
         # separator
         # Frame(height=2, bd=1, relief=SUNKEN).pack(fill=X, padx=5, pady=5)
 
-        # notebook = ttk.Notebook(master)
-        # file_frame = ttk.Frame(notebook)
-        # directory_frame = ttk.Frame(notebook)
-        # notebook.add(file_frame, text='Process File')
-        # notebook.add(directory_frame, text='Process Directory')
+        notebook = ttk.Notebook(master)
+        file_frame = Frame(notebook)
+        directory_frame = Frame(notebook)
+        notebook.add(file_frame, text='Process File')
+        notebook.add(directory_frame, text='Process Directory')
+        notebook.pack(anchor=NW, padx=10, pady=10)
+        self.style_notebook()
 
-        # file format
-        self.format = StringVar()
-        self.format_frame = Frame(master)
-        self.format_frame.pack(anchor=NW, padx=10, pady=10)
-        self.make_format_frame(self.FMT_TASKPAPER[1], self.FROM_CSV)
+        self.make_file_frame(file_frame)
+        self.make_directory_frame(directory_frame)
 
-        # download attachments
-        self.download = IntVar()
-        download_frame = Frame(master)
-        download_frame.pack(anchor=NW)
-        self.checkbox_download = Checkbutton(download_frame, text="Download Attachments?", variable=self.download)
-        self.checkbox_download.pack(side=LEFT, padx=10, pady=10)
-
-        # output file
-        self.output_file = StringVar()
-        output_frame = Frame(master)
-        output_frame.pack(anchor=NW, padx=10, pady=10)
-        Label(output_frame, text="Output file (derived from input if empty):").pack(side=LEFT)
-        self.entry_target_file = Entry(output_frame, text="foobar", textvariable=self.output_file)
-        self.entry_target_file.pack(side=LEFT, padx=10, pady=10)
-
-        # buttons: convert, quit
+        # buttons: convert
         buttons_frame = Frame(master)
         buttons_frame.pack(anchor=NW, fill=X)
         self.button_convert = Button(buttons_frame, text="Convert", command=self.convert)
@@ -116,47 +92,152 @@ class App:
         logger_frame.pack(anchor=NW, fill=X, padx=10, pady=10)
         self.console = ConsoleUi(logger_frame, master)
 
-    def make_format_frame(self, default, available_formats):
+    def style_notebook(self):
+        grey = "#d2d2d2"
+        white = "#ffffff"
+
+        style = ttk.Style()
+
+        style.theme_create("blueish", parent="alt", settings={
+            "TNotebook": {"configure": {"tabmargins": [2, 5, 2, 0]}},
+            "TNotebook.Tab": {
+                "configure": {"padding": [5, 5], "background": grey},
+                "map": {"background": [("selected", white)],
+                        "expand": [("selected", [1, 1, 1, 0])]}}})
+        style.theme_use("blueish")
+
+    def make_file_frame(self, frame):
+        # source file
+        self.filename = StringVar()
+        self.filename.trace("w", lambda name, index, mode, source=self.filename: self.cb_source_file_changed(source))
+
+        source_frame = Frame(frame)
+        source_frame.pack(anchor=NW, padx=10, pady=10)
+        Label(source_frame, text="File to convert (CSV or OPML):").pack(side=LEFT)
+        Entry(source_frame, text="foobar", textvariable=self.filename).pack(side=LEFT)
+        Button(source_frame, text="Select File", command=self.cb_select_file).pack(side=LEFT)
+
+        # file format
+        self.format = StringVar()
+        self.format_frame = Frame(frame)
+        self.format_frame.pack(anchor=NW, padx=10, pady=10)
+        self._make_format_frame(self.format_frame, self.format, self.FMT_TASKPAPER[1], self.FROM_CSV)
+
+        # download attachments
+        self.download = IntVar()
+        download_frame = Frame(frame)
+        download_frame.pack(anchor=NW)
+        self.checkbox_download = Checkbutton(download_frame, text="Download Attachments?", variable=self.download)
+        self.checkbox_download.pack(side=LEFT, padx=10, pady=10)
+
+        # output file
+        self.output_file = StringVar()
+        output_frame = Frame(frame)
+        output_frame.pack(anchor=NW, padx=10, pady=10)
+        Label(output_frame, text="Output file (derived from input if empty):").pack(side=LEFT)
+        self.entry_target_file = Entry(output_frame, text="foobar", textvariable=self.output_file)
+        self.entry_target_file.pack(side=LEFT, padx=10, pady=10)
+
+    def make_directory_frame(self, frame):
+        # source file
+        self.dirname = StringVar()
+
+        source_frame = Frame(frame)
+        source_frame.pack(anchor=NW, padx=10, pady=10)
+        Label(source_frame, text="Select a directory:").pack(side=LEFT)
+        Entry(source_frame, text="", textvariable=self.dirname).pack(side=LEFT)
+        Button(source_frame, text="Select Directory", command=self.cb_select_dir).pack(side=LEFT)
+
+        # source format
+        self.dir_source_format = StringVar()
+
+        source_format_frame = Frame(frame)
+        source_format_frame.pack(anchor=NW, padx=10, pady=10)
+        self._make_format_frame(source_format_frame, self.dir_source_format, CSV, self.DIR_SOURCE_FORMATS)
+        self.dir_source_format.trace("w", lambda name, index, mode, source_format=self.dir_source_format: self.cb_dir_source_format_changed(source_format))
+
+        # init all variables for options before populating the frame
+        self.dir_target_format = StringVar()
+        self.dir_download_attachments = IntVar()
+        self.dir_collect_to_one_file = IntVar()
+
+        self.dir_options_frame = LabelFrame(frame, text="Format Options:", padx=5, pady=5)
+        self.dir_options_frame.pack(anchor=NW, fill=X, padx=10, pady=10)
+
+        self.make_dir_csv_options_frame(self.dir_options_frame)
+
+    def make_dir_csv_options_frame(self, frame):
+
+        self.clean_frame(frame)
+        # file format
+        format_frame = Frame(frame)
+        format_frame.pack(anchor=NW, padx=10, pady=10)
+        self._make_format_frame(format_frame, self.dir_target_format, self.FMT_TASKPAPER[1], self.FROM_CSV)
+
+        # download attachments
+        download_frame = Frame(frame)
+        download_frame.pack(anchor=NW)
+        checkbox_download = Checkbutton(download_frame, text="Download Attachments?", variable=self.dir_download_attachments)
+        checkbox_download.pack(side=LEFT, padx=10, pady=10)
+
+    def _make_format_frame(self, frame, variable, default, available_formats):
         """Set available output formats."""
-
-        # destroy all widgets of frame
-        for widget in self.format_frame.winfo_children():
-            widget.destroy()
-
-        self.format.set(default)
-        Label(self.format_frame, text="Convert to: ").pack(side=LEFT)
+        variable.set(default)
+        Label(frame, text="Convert to: ").pack(side=LEFT)
         for text, mode in available_formats:
-            self.select_format = Radiobutton(self.format_frame, text=text, variable=self.format, value=mode)
-            self.select_format.pack(side=LEFT)
+            # TODO: can this become Radiobutton(...).pack()??
+            select_format = Radiobutton(frame, text=text, variable=variable, value=mode)
+            select_format.pack(side=LEFT)
+
+    def clean_frame(self, frame):
+        for widget in frame.winfo_children():
+            widget.destroy()
 
     def cb_source_file_changed(self, source):
         """Determine what kind of source file is selected."""
 
         name = source.get()
 
+        def switch_format(source_type, default, available_formats):
+            self.source_type = source_type
+            self.clean_frame(self.format_frame)
+            self._make_format_frame(self.format_frame, self.format, default, available_formats)
+
         if name.lower().endswith('csv'):
-            self.source_type = CSV
-            self.make_format_frame(self.FMT_TASKPAPER[1], self.FROM_CSV)
+            switch_format(CSV, self.FMT_TASKPAPER[1], self.FROM_CSV)
         elif name.lower().endswith('opml'):
-            self.source_type = OPML
-            self.make_format_frame(self.FMT_CSV[1], self.FROM_OPML)
+            switch_format(OPML, self.FMT_CSV[1], self.FROM_OPML)
         elif name.lower().endswith('zip'):
-            self.source_type = ZIP
-            self.make_format_frame(self.FMT_TASKPAPER[1], self.FROM_ZIP)
+            switch_format(ZIP, self.FMT_TASKPAPER[1], self.FROM_ZIP)
         else:
             self.source_type = None
+
+    def cb_dir_source_format_changed(self, source_format):
+
+        format = source_format.get()
+        if format == self.FMT_OPML[1]:
+            self.clean_frame(self.dir_options_frame)
+        elif format == self.FMT_CSV[1]:
+            self.make_dir_csv_options_frame(self.dir_options_frame)
+        else:
+            raise Exception("unknown source format %s" % format)
 
     def cb_select_file(self):
         filename = tkFileDialog.askopenfilename(initialdir=".",
                                                 title="Select file",
                                                 defaultextension='*.csv',
                                                 filetypes=(("Todoist Files", "*.csv"),
-                                                           ("OPML Files", "*.opml"),
+                                                           ("OPML Files", "*.opml"),  # TODO: extend with ZIP
                                                            ("all files", "*.*")))
-        print(filename)
         self.filename.set(filename)
 
+    def cb_select_dir(self):
+        dirname = tkFileDialog.askdirectory()
+        self.dirname.set(dirname)
+
     def convert(self):
+        # TODO: make options for directory conversion
+        # TODO: process zip conversion
         source = self.filename.get()
         if not source:
             logger.error("No source file set!!")
