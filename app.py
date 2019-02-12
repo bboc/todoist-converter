@@ -4,9 +4,11 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 from argparse import Namespace
+import logging
 import os
-import sys
+import queue
 
+import tkFileDialog
 from tkinter import (
     Tk,
     Button,
@@ -21,12 +23,9 @@ from tkinter import (
     X, LEFT, SUNKEN, END,
 )
 from tkinter.scrolledtext import ScrolledText
-import tkFileDialog
+import traceback
 
 from tdconv.tdconv import convert
-import logging
-import queue
-import traceback
 
 logger = logging.getLogger("tdconv")
 
@@ -42,7 +41,7 @@ class App:
 
     def __init__(self, master):
 
-        master.title("todoist-converter v0.4")
+        master.title("todoist converter v0.4")
 
         # source file
         self.filename = StringVar()
