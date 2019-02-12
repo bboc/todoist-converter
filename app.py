@@ -21,7 +21,7 @@ from tkinter import (
     Checkbutton,
     IntVar,
     N, NW, NE, S, E, W,
-    X, LEFT, BOTH, SUNKEN, END,
+    X, LEFT, RIGHT, BOTH, SUNKEN, END,
 )
 from tkinter.scrolledtext import ScrolledText
 import ttk
@@ -61,13 +61,13 @@ class App:
         self.filename.trace("w", lambda name, index, mode, source=self.filename: self.cb_source_file_changed(source))
 
         source_frame = Frame(master)
-        source_frame.pack(anchor=NW)
-        Label(source_frame, text="File to convert:").pack(side=LEFT)
+        source_frame.pack(anchor=NW, padx=10, pady=10)
+        Label(source_frame, text="File to convert (CSV or OPML):").pack(side=LEFT)
         Entry(source_frame, text="foobar", textvariable=self.filename).pack(side=LEFT)
         Button(source_frame, text="Select File", command=self.cb_select_file).pack(side=LEFT)
 
         # separator
-        Frame(height=2, bd=1, relief=SUNKEN).pack(fill=X, padx=5, pady=5)
+        # Frame(height=2, bd=1, relief=SUNKEN).pack(fill=X, padx=5, pady=5)
 
         # notebook = ttk.Notebook(master)
         # file_frame = ttk.Frame(notebook)
@@ -75,50 +75,36 @@ class App:
         # notebook.add(file_frame, text='Process File')
         # notebook.add(directory_frame, text='Process Directory')
 
-        # output file
-        self.output_file = StringVar()
-        output_frame = Frame(master)
-        output_frame.pack(anchor=NW)
-        Label(output_frame, text="Output file (derived from input if empty):").pack(side=LEFT)
-        self.entry_target_file = Entry(output_frame, text="foobar", textvariable=self.output_file)
-        self.entry_target_file.pack(side=LEFT)
-
-        # separator
-        Frame(height=2, bd=1, relief=SUNKEN).pack(fill=X, padx=5, pady=5)
+        # file format
+        self.format = StringVar()
+        self.format_frame = Frame(master)
+        self.format_frame.pack(anchor=NW, padx=10, pady=10)
+        self.make_format_frame(self.FMT_TASKPAPER[1], self.FROM_CSV)
 
         # download attachments
         self.download = IntVar()
         download_frame = Frame(master)
         download_frame.pack(anchor=NW)
         self.checkbox_download = Checkbutton(download_frame, text="Download Attachments?", variable=self.download)
-        self.checkbox_download.pack(side=LEFT)
+        self.checkbox_download.pack(side=LEFT, padx=10, pady=10)
 
-        # separator
-        Frame(height=2, bd=1, relief=SUNKEN).pack(fill=X, padx=5, pady=5)
-
-        # file format
-        self.format = StringVar()
-        self.format_frame = Frame(master)
-        self.format_frame.pack(anchor=NW)
-        self.make_format_frame(self.FMT_TASKPAPER[1], self.FROM_CSV)
-
-        # separator
-        Frame(height=2, bd=1, relief=SUNKEN).pack(fill=X, padx=5, pady=5)
+        # output file
+        self.output_file = StringVar()
+        output_frame = Frame(master)
+        output_frame.pack(anchor=NW, padx=10, pady=10)
+        Label(output_frame, text="Output file (derived from input if empty):").pack(side=LEFT)
+        self.entry_target_file = Entry(output_frame, text="foobar", textvariable=self.output_file)
+        self.entry_target_file.pack(side=LEFT, padx=10, pady=10)
 
         # buttons: convert, quit
         buttons_frame = Frame(master)
         buttons_frame.pack(anchor=NW, fill=X)
-        self.button_quit = Button(buttons_frame, text="Quit", fg="red", command=master.quit)
-        self.button_quit.pack(anchor=NW, side=LEFT)
         self.button_convert = Button(buttons_frame, text="Convert", command=self.convert)
-        self.button_convert.pack(anchor=NE)
+        self.button_convert.pack(anchor=NW, side=LEFT)
 
-
-
-        ##logger_frame = Frame(master)
         logger_frame = LabelFrame(master, text="Converter Output:", padx=5, pady=5)
         logger_frame.pack(anchor=NW, fill=X, padx=10, pady=10)
-        self.console = ConsoleUi(logger_frame)
+        self.console = ConsoleUi(logger_frame, master)
 
     def make_format_frame(self, default, available_formats):
         """Set available output formats."""
@@ -206,7 +192,7 @@ class QueueHandler(logging.Handler):
 class ConsoleUi:
     """Poll messages from a logging queue and display them in a scrolled text widget"""
 
-    def __init__(self, frame):
+    def __init__(self, frame, master):
         self.frame = frame
         # Create a ScrolledText wdiget
         self.scrolled_text = ScrolledText(frame, state='disabled', height=12)
@@ -226,6 +212,8 @@ class ConsoleUi:
         # Start polling messages from the queue
         self.frame.after(100, self.poll_log_queue)
         self.scrolled_text.pack(fill=BOTH, expand=1)
+        self.button_quit = Button(self.frame, text="Quit", fg="red", command=master.quit)
+        self.button_quit.pack(anchor=NE, side=RIGHT)
 
     def display(self, record):
         msg = self.queue_handler.format(record)
