@@ -23,11 +23,17 @@ from tkinter import (
     X, LEFT, SUNKEN, END,
 )
 from tkinter.scrolledtext import ScrolledText
+import ttk
 import traceback
 
 from tdconv.tdconv import convert
 
 logger = logging.getLogger("tdconv")
+
+
+OPML = 'opml'
+ZIP = 'zip'
+CSV = 'csv'
 
 
 class App:
@@ -41,10 +47,16 @@ class App:
 
     def __init__(self, master):
 
+        self.source_type = None
+        self.build_gui(master)
+
+    def build_gui(self, master):
         master.title("todoist converter v0.4")
 
         # source file
         self.filename = StringVar()
+        self.filename.trace("w", lambda name, index, mode, source=self.filename: self.cb_source_file_changed(source))
+
         source_frame = Frame(master)
         source_frame.pack(anchor=NW)
         Label(source_frame, text="File to convert:").pack(side=LEFT)
@@ -53,6 +65,12 @@ class App:
 
         # separator
         Frame(height=2, bd=1, relief=SUNKEN).pack(fill=X, padx=5, pady=5)
+
+        # notebook = ttk.Notebook(master)
+        # file_frame = ttk.Frame(notebook)
+        # directory_frame = ttk.Frame(notebook)
+        # notebook.add(file_frame, text='Process File')
+        # notebook.add(directory_frame, text='Process Directory')
 
         # output file
         self.output_file = StringVar()
@@ -96,9 +114,26 @@ class App:
         self.button_convert = Button(buttons_frame, text="Convert", command=self.convert)
         self.button_convert.pack(anchor=NE)
 
+        # separator
+        Frame(height=2, bd=1, relief=SUNKEN).pack(fill=X, padx=5, pady=5)
+
         logger_frame = Frame(master)
         logger_frame.pack(anchor=NW, fill=X)
         self.console = ConsoleUi(logger_frame)
+
+    def cb_source_file_changed(self, source):
+        """Determine what kind of source file is selected."""
+
+        name = source.get()
+        if name.lower().endswith('opml'):
+            self.source_type = OPML
+
+        elif name.lower().endswith('zip'):
+            self.source_type = ZIP
+        elif name.lower().endswith('csv'):
+            self.source_type = CSV
+        else:
+            self.source_type = None
 
     def cb_select_file(self):
         filename = tkFileDialog.askopenfilename(initialdir=".",
