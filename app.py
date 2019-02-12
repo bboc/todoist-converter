@@ -15,12 +15,13 @@ from tkinter import (
     Entry,
     Frame,
     Label,
+    LabelFrame,
     StringVar,
     Radiobutton,
     Checkbutton,
     IntVar,
     N, NW, NE, S, E, W,
-    X, LEFT, SUNKEN, END,
+    X, LEFT, BOTH, SUNKEN, END,
 )
 from tkinter.scrolledtext import ScrolledText
 import ttk
@@ -78,18 +79,9 @@ class App:
         self.output_file = StringVar()
         output_frame = Frame(master)
         output_frame.pack(anchor=NW)
-        Label(output_frame, text="Output file (optional):").pack(side=LEFT)
+        Label(output_frame, text="Output file (derived from input if empty):").pack(side=LEFT)
         self.entry_target_file = Entry(output_frame, text="foobar", textvariable=self.output_file)
         self.entry_target_file.pack(side=LEFT)
-
-        # separator
-        Frame(height=2, bd=1, relief=SUNKEN).pack(fill=X, padx=5, pady=5)
-
-        # file format
-        self.format = StringVar()
-        self.format_frame = Frame(master)
-        self.format_frame.pack(anchor=NW)
-        self.make_format_frame(self.FMT_TASKPAPER[1], self.FROM_CSV)
 
         # separator
         Frame(height=2, bd=1, relief=SUNKEN).pack(fill=X, padx=5, pady=5)
@@ -104,6 +96,15 @@ class App:
         # separator
         Frame(height=2, bd=1, relief=SUNKEN).pack(fill=X, padx=5, pady=5)
 
+        # file format
+        self.format = StringVar()
+        self.format_frame = Frame(master)
+        self.format_frame.pack(anchor=NW)
+        self.make_format_frame(self.FMT_TASKPAPER[1], self.FROM_CSV)
+
+        # separator
+        Frame(height=2, bd=1, relief=SUNKEN).pack(fill=X, padx=5, pady=5)
+
         # buttons: convert, quit
         buttons_frame = Frame(master)
         buttons_frame.pack(anchor=NW, fill=X)
@@ -112,11 +113,11 @@ class App:
         self.button_convert = Button(buttons_frame, text="Convert", command=self.convert)
         self.button_convert.pack(anchor=NE)
 
-        # separator
-        Frame(height=2, bd=1, relief=SUNKEN).pack(fill=X, padx=5, pady=5)
 
-        logger_frame = Frame(master)
-        logger_frame.pack(anchor=NW, fill=X)
+
+        ##logger_frame = Frame(master)
+        logger_frame = LabelFrame(master, text="Converter Output:", padx=5, pady=5)
+        logger_frame.pack(anchor=NW, fill=X, padx=10, pady=10)
         self.console = ConsoleUi(logger_frame)
 
     def make_format_frame(self, default, available_formats):
@@ -224,6 +225,7 @@ class ConsoleUi:
         logger.addHandler(self.queue_handler)
         # Start polling messages from the queue
         self.frame.after(100, self.poll_log_queue)
+        self.scrolled_text.pack(fill=BOTH, expand=1)
 
     def display(self, record):
         msg = self.queue_handler.format(record)
