@@ -76,6 +76,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### 0.4
 
+- **added**: tabbed GUI for selecting individual files or whole directories
 - **added**: App now outputs parameters and output directory before conversion
 - **fixed**: App tests for existence of input file before conversion
 - **added**: App displays error information
