@@ -80,7 +80,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **fixed**: App tests for existence of input file before conversion
 - **added**: App displays error information
 - **added**: App icon
+- **added**: App now displays conversion formats dependent on the selected input file
 - **added**: makefile with commands for building release and debug apps
+- **changed**: cleaned up layout of app
 - **fixed**: fixed a bug in taskpaper export where empty priority in a task would result in an exception
 
 ### 0.3
