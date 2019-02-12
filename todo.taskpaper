@@ -16,17 +16,17 @@ todoist-converter:
 		Make GUI dynamic dependent on input (todoist CSV, Todoist Backup (ZIP), OPML, Directory): after file selection, change selection and enable/disable sections.
 			
 		- Add two tabs (one for folders, one for files), which also include the convert button, but NOT the output area.
-		- add separator or title to output area and make it extend with the window
+		- add separator or title to output area and make it extend with the window @done
 		Files Tab:
-			- File to Convert: ____________
-			- Output Filename: _____________
-			- [ ] Download attachments
+			- File to Convert: ____________ @done
+			- Output Filename: _____________ @done
+			- [ ] Download attachments @done
 			File is OPML:
-				- Ouptut Format: (x) CSV
+				- Ouptut Format: (x) CSV @done
 			File is todoist CSV:
-				- Ouptut Format: (x) Taskpaper ( ) OPML ( ) Markdown
+				- Ouptut Format: (x) Taskpaper ( ) OPML ( ) Markdown @done
 			File is Todoist Backup (ZIP file):
-				- Output Format: (x) Taskpaper ( ) Markdown
+				- Output Format: (x) Taskpaper ( ) Markdown @done
 				- [ ] Collect to one file
 		Directory Tab:
 			- Directory to Convert: ____________
@@ -38,5 +38,4 @@ todoist-converter:
 				- [ ] Collect to one file
 
 other:
-	- get the modern tkinter book? http://www.tkdocs.com/tutorial/complex.html
 	- convert png co mac icon: https://iconverticons.com/online/
