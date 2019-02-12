@@ -1,7 +1,4 @@
 todoist-converter:
-	distribution:
-		- add license file @small
-		- Create a formula for homebrew, see for explanation http://jimkubicek.com/blog/2015/02/14/creating-a-homebrew-formula-for-a-python-project/ @medium @later
 	fixes:
 		- opml to csv does not write priority as int (empty string instead) @na
 		- app does not export to OPML @na
@@ -10,38 +7,36 @@ todoist-converter:
 		- process an entire backup zip file @medium
 		- process folder @small
 		- process one zip file or folder into one OPML file @medium
-		- convert opml to taskpaper and back (find out: what is a task, and what is an note, this should not be ambiguous, use taskpaper opml script, omnioutliner task paper export and carbon fin to test)
-
-	GUI:
-		- add simple error handling @done
-		- add "working..." and result message to gui @done
-		- add app icon with pyinstaller --icon <FILE.ico or FILE.icns> @done
-		New GUI Step 1:
-			- Tab: OPML file
-				- File to Convert: ____________
-				- Output Filename: _____________
-				- (x) CSV
-				- [ ] Download
-			- Tab: CSV file:
-				- File to Convert: ____________
-				- Output Filename: _____________
-				- ( ) Taskpaper ( ) OPML ( ) Markdown
-				- [ ] Download
-		New GUI Step 2:
-			- Todoist Backup (ZIP file)
-				- File to Convert: ____________
-				- ( ) Taskpaper ( ) Markdown
-				- [ ] Download
+		- convert opml to taskpaper and back (find out: what is a task, and what is an note, this should not be ambiguous, use taskpaper opml script, omnioutliner task paper export and carbon fin to test) @large
+	distribution:
+		- add license file @small
+		- Create a formula for homebrew, see for explanation http://jimkubicek.com/blog/2015/02/14/creating-a-homebrew-formula-for-a-python-project/ @medium @later
+	
+	GUI Redesign:
+		Make GUI dynamic dependent on input (todoist CSV, Todoist Backup (ZIP), OPML, Directory): after file selection, change selection and enable/disable sections.
+			
+		- Add two tabs (one for folders, one for files), which also include the convert button, but NOT the output area.
+		- add separator or title to output area and make it extend with the window
+		Files Tab:
+			- File to Convert: ____________
+			- Output Filename: _____________
+			- [ ] Download attachments
+			File is OPML:
+				- Ouptut Format: (x) CSV
+			File is todoist CSV:
+				- Ouptut Format: (x) Taskpaper ( ) OPML ( ) Markdown
+			File is Todoist Backup (ZIP file):
+				- Output Format: (x) Taskpaper ( ) Markdown
 				- [ ] Collect to one file
-		New GUI Step 3:
-			- Directory
-				- Directory to Convert: ____________
-				- process files: ( ) Todoist (CSV) ( ) OPML
-				- if Todoist: 
-					- [ ] Download
-					- ( ) Taskpaper ( ) OPML ( ) Markdown
-				- if target not OPML()
-					- [ ] Collect to one file
+		Directory Tab:
+			- Directory to Convert: ____________
+			- Files to process: ( ) Todoist (CSV) ( ) OPML
+			- if Todoist: 
+				- [ ] Download
+				- ( ) Taskpaper ( ) OPML ( ) Markdown
+			- if target not OPML()
+				- [ ] Collect to one file
 
 other:
 	- get the modern tkinter book? http://www.tkdocs.com/tutorial/complex.html
+	- convert png co mac icon: https://iconverticons.com/online/
