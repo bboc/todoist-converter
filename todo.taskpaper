@@ -1,9 +1,6 @@
 todoist-converter:
 	known problems:
-		- Issue #1: app does not export to OPML, while tdconv works exactly as expected: by default, app does attempt to write to root ("/"), which is not allowed. When used from the terminal, the user is typically in a driectory that is writable to the user, e.g. the user's home directory or in the directory where the source files are located. App must write result file to the same directory as input file if no specific location is set.  @na
-			- target file is source file with new extension
-			- if output is set, and contains at least one path separator, output is considered full path
-			- if output does not contain a path separator, it is considered a filename root
+		- Issue #1: app does not export to OPML, while tdconv works exactly as expected: by default, app does attempt to write to root ("/"), which is not allowed. When used from the terminal, the user is typically in a driectory that is writable to the user, e.g. the user's home directory or in the directory where the source files are located. App must write result file to the same directory as input file if no specific location is set.  @na @done
 		- opml to csv does not write priority as int (empty string instead) @na
 	features:
 		- process an entire backup zip file @medium
