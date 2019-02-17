@@ -4,7 +4,7 @@ import os
 import unittest
 
 from app import make_target_filename
-from tdconv import TargetDirectoryDoesNotExistError
+from tdconv.tdconv import TargetDirectoryDoesNotExistError
 from tdconv_tests import data_dir
 
 
