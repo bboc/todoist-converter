@@ -5,6 +5,8 @@ debug:
 	-rm dist/todoist-converter-debug
 	pyinstaller --onefile --log-level WARN --icon=icon.icns --name todoist-converter-debug --debug all --windowed app.py
 	open dist/todoist-converter-debug 
+apptest:
+	python app.py
 test:
 	nosetests
 dev:
