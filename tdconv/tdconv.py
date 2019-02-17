@@ -109,7 +109,7 @@ def main():
     parser.add_argument('--download', '-d', action="store_true", default=False,
                         help='download attachments')
     parser.add_argument('file',
-                        help='file to convert')
+                        help='file to convert (either csv, opml or a zip file that contains csv files')
 
     args = parser.parse_args()
     convert(args)
