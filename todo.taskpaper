@@ -1,9 +1,9 @@
 todoist-converter:
 	known problems:
-		- Issue #1: app does not export to OPML, while tdconv works exactly as expected: by default, app does attempt to write to root ("/"), which is not allowed. When used from the terminal, the user is typically in a driectory that is writable to the user, e.g. the user's home directory or in the directory where the source files are located. App must write result file to the same directory as input file if no specific location is set.  @na @done
+		✔ Issue #1: app does not export to OPML, while tdconv works exactly as expected: by default, app does attempt to write to root ("/"), which is not allowed. When used from the terminal, the user is typically in a driectory that is writable to the user, e.g. the user's home directory or in the directory where the source files are located. App must write result file to the same directory as input file if no specific location is set.  @na @done (19-02-17 21:48)
 		- opml to csv does not write priority as int (empty string instead) @na
 	features:
-		- process an entire backup zip file @medium
+		✔ process an entire backup zip file @medium @done (19-02-17 21:49)
 		- process folder @small @done
 		- process one zip file or folder into one OPML file @medium
 		- convert opml to taskpaper and back (find out: what is a task, and what is an note, this should not be ambiguous, use taskpaper opml script, omnioutliner task paper export and carbon fin to test) @large
