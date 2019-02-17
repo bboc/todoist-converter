@@ -1,17 +1,16 @@
 # todoist-converter
 
-Convert Todoist CSV templates and entire Todoist backup TaskPaper, Markdown, or OPML, and convert OPML-Files to Todoist CSV templates.
+Convert [Todoist](http://todoist.com/) CSV templates and entire Todoist backups to TaskPaper, Markdown, or OPML, and convert OPML-Files back to Todoist CSV templates.
 
-Wheter you're ready to move from Todoist to Taskpaper, or if you just want to convert individual projects to opml and back again - e.g. for use in [CarbonFin Outliner](http://carbonfin.com/) or OmniOutliner - todoist-convert has you covered.
+Whether you're ready to move from Todoist to Taskpaper, or if you just want to convert individual projects to opml and back again - e.g. for use in [CarbonFin Outliner](http://carbonfin.com/) or OmniOutliner - todoist-convert has you covered.
 
 Todoist note attachments are either referenced via URL, or optionally downloaded locally (for Markdown or TaskPaper files).
 
-
 ## Get the OS-X App
 
-Download a [release on github](https://github.com/bboc/todoist-converter/releases/latest)
+For the casual user it's highly recommended to download the [MacOS App from github](https://github.com/bboc/todoist-converter/releases/latest)
 
-take a look at the [changelog](#changelog)
+To see what's new, take a look at the [changelog](#changelog) at the bottom of this file.
 
 ## tdconv command
 
@@ -41,7 +40,7 @@ If an output file is specified with `--output` or `-o`, and the output file exis
 
 ### Migrating projects from Todoist to Taskpaper
 
-Because Todoist cannot export mulitple projects to one file, each Taskpaper file is exported as one project, so that it's easy to combine individual project exports, e.g. via copy and paste in the Taskpaper app or via `cat file1 file2 >destination`
+Because Todoist cannot export multiple projects to one file, each Taskpaper file is exported as one project, so that it's easy to combine individual project exports, e.g. via copy and paste in the Taskpaper App or via `cat file1 file2 >destination`
 
 **Known Limitations**:
 
@@ -60,9 +59,14 @@ Because Todoist cannot export mulitple projects to one file, each Taskpaper file
 
 #### Full migration
 
-1. Download the latest backup from Todoist (Settings -> Backups)
-2. unzip the resulting files
-3. `ls -bp | xargs -I xx tdconv -df taskpaper "xx"`
+Download the latest backup from Todoist (Settings -> Backups) and either use 
+
+`tdconv -df taskpaper <your-backup.zip>`
+
+or manually:
+
+1. unzip the downloaded archive
+2. `ls -bp | xargs -I xx tdconv -df taskpaper "xx"`
 
 
 ## Notes
