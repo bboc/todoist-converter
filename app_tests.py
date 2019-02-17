@@ -23,7 +23,7 @@ class TargetFilenameForDirectoryTests(unittest.TestCase):
     def test_simple_output_should_raise_exception(self):
         """Output without os.sep should raise an exception if target does not exist"""
         self.failUnlessRaises(TargetDirectoryDoesNotExistError,
-                              make_target_filename, data_dir(), "/foo/bar/baz", "taskpaper")
+                              make_target_filename, data_dir(), "no-result", "taskpaper")
 
     def test_pathsep(self):
         """Output with a pathsep should be treated as existing folder."""
@@ -31,7 +31,7 @@ class TargetFilenameForDirectoryTests(unittest.TestCase):
         t = make_target_filename(data_dir(), output, "taskpaper")
         self.failUnlessEqual(t, output)
 
-    def test_output_with_pathsep_should_raise_exception(self):
+    def test_output_with_full_path_should_raise_exception(self):
         """Function should raise an exception if target does not exist"""
         self.failUnlessRaises(TargetDirectoryDoesNotExistError,
                               make_target_filename, data_dir(), "/foo/bar", "taskpaper")
@@ -53,14 +53,14 @@ class TargetFilenameForZipTests(unittest.TestCase):
     def test_simple_output_should_raise_exception(self):
         """Output without os.sep should raise an exception if target does not exist"""
         self.failUnlessRaises(TargetDirectoryDoesNotExistError,
-                              make_target_filename, "/Users/foobar/test/mystuff.ZiP", "foo/bar", "taskpaper")
+                              make_target_filename, "/Users/foobar/test/mystuff.ZiP", "no-result", "taskpaper")
 
-    def test_output_with_pathsep(self):
+    def test_output_with_full_path(self):
         """Output that starts with a os.sep is treated as complete path to existing folder."""
         t = make_target_filename("/Users/foobar/test/mystuff.ZiP", os.path.abspath(data_dir()), "taskpaper")
         self.failUnlessEqual(t, os.path.abspath(data_dir()))
 
-    def test_output_with_pathsep_should_raise_exception(self):
+    def test_output_with_full_path_should_raise_exception(self):
         """Function should raise an exception if target does not exist"""
         self.failUnlessRaises(TargetDirectoryDoesNotExistError,
                               make_target_filename, "/Users/foobar/test/mystuff.ZiP", "/foo/bar", "taskpaper")
@@ -82,7 +82,7 @@ class TargetFilenameForFilesTests(unittest.TestCase):
         t = make_target_filename("/Users/foobar/test/mystuff.csv", "result/file", "taskpaper")
         self.failUnlessEqual(t, "/Users/foobar/test/result/file.taskpaper")
 
-    def test_output_with_pathsep(self):
+    def test_output_with_full_path(self):
         """Output that starts with a os.sep is treated as complete path."""
         t = make_target_filename("/Users/foobar/test/mystuff.csv", "/result/file.ext", "taskpaper")
         self.failUnlessEqual(t, "/result/file.ext")

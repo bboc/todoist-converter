@@ -197,46 +197,39 @@ def make_target_filename(source, output, ext):
         - otherwise output  is considered a filename root
     """
     def _make_name(name, ext):
-        return '.'.join((os.path.splitext(name)[0], ext))
+        return 
 
-    if os.path.isdir(source):
-        # source is a directory --> target needs to be a directory, too
+
+    def _make_target_directory(source_dir, output):
         if output:
-            target = os.path.join(source, output)
+            if output.startswith(os.sep):
+                target = output
+            else:
+                target = os.path.join(source_dir, output)
             if not os.path.isdir(target):
                 raise TargetDirectoryDoesNotExistError("Output dir '%s' does not exist" % target)
             return target
-        return source
+        return source_dir
 
+    if os.path.isdir(source):
+        # source is a directory --> target needs to be a directory, too
+        return _make_target_directory(source, output)
     else:
         # source is a file
-        root, current_ext = os.path.splitext(source)
-
+        root, source_ext = os.path.splitext(source)
         head, tail = os.path.split(source)
-        if current_ext.lower() == '.zip':
+        if source_ext.lower() == '.zip':
             # source is a zipfile --> target needs to be a directory
-            if not output:
-                return head
-            elif output.startswith(os.sep):
-                if os.path.isdir(output):
-                    return output
-                else:
-                    raise TargetDirectoryDoesNotExistError("Output dir '%s' does not exist" % output)
-            else:
-                target = os.path.join(head, output)
-                if os.path.isdir(target):
-                    return target
-                else:
-                    raise TargetDirectoryDoesNotExistError("Output dir '%s' does not exist" % target)
+            return _make_target_directory(head, output)
         else:
             # source is a single file --> target is a file, too
-            new_name = _make_name(tail, ext)
-            if output:
-                if output.startswith(os.sep):
-                    return output
-                else:
-                    new_name = _make_name(output, ext)
-
+            if output.startswith(os.sep):
+                return output
+            elif output:
+                new_root = output
+            else:
+                new_root = tail
+            new_name = '.'.join((os.path.splitext(new_root)[0], ext))
             return os.path.join(head, new_name)
 
 
