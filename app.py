@@ -189,10 +189,23 @@ class App:
 def make_target_filename(source, output, ext):
     """Return target filename:
         - for source != zip or directory: target file is source file with new extension
-        - if output is set, and contains at least one path separator, output is considered full path
-        - if output does not contain a path separator, it is considered a filename root
+        - if output starts with os.sep, it's is considered full path
+        - otherwise output  is considered a filename root
     """
-    pass
+
+    def _make_name(name, ext):
+        return '.'.join((os.path.splitext(name)[0], ext))
+
+    head, tail = os.path.split(source)
+
+    new_name = _make_name(tail, ext)
+    if output:
+        if output.startswith(os.sep):
+            return output
+        else:
+            new_name = _make_name(output, ext)
+
+    return os.path.join(head, new_name)
 
 
 class QueueHandler(logging.Handler):
