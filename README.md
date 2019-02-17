@@ -74,7 +74,7 @@ Import of generated CSV tested with Todoist on OS-X version 715.
 The format of the changelog is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-### 0.4
+### 1.0
 
 - **added**: tabbed GUI for selecting individual files or whole directories
 - **added**: App now outputs parameters and output directory before conversion
@@ -82,6 +82,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **added**: App displays error information
 - **added**: App icon
 - **added**: App now can process an entire directory todoist- or opml-files
+- **added**: App and commandline tools now are able to process an zip file (e.g. the backups downloaded from todoist) in one go
 - **added**: App now displays conversion formats dependent on the selected input file
 - **fixed**: App defaults to write to root folder on MacOS
 - 
