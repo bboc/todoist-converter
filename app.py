@@ -196,10 +196,6 @@ def make_target_filename(source, output, ext):
         - if output starts with os.sep, it's is considered full path
         - otherwise output  is considered a filename root
     """
-    def _make_name(name, ext):
-        return 
-
-
     def _make_target_directory(source_dir, output):
         if output:
             if output.startswith(os.sep):
