@@ -1,8 +1,7 @@
 todoist-converter:
-	fixes:
+	known problems:
+		- Issue #1: app does not export to OPML: by default, app does attempt to write to root ("/"), which is not allowed. When used from the terminal, the user is typically in a driectory that is writable to the user, e.g. the user's home directory or in the directory where the source files are located. App must write result file to the same directory as input file if no specific location is set @na
 		- opml to csv does not write priority as int (empty string instead) @na
-		- app does not export to OPML @na
-		- app must write result file to the same directory as input file if no specific location is set @na
 	features:
 		- process an entire backup zip file @medium
 		- process folder @small
