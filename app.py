@@ -186,17 +186,36 @@ class App:
         logger.info("ready")
 
 
+class TargetDirectoryDoesNotExistError(Exception):
+    pass
+
+
 def make_target_filename(source, output, ext):
     """Return target filename:
         - for source != zip or directory: target file is source file with new extension
         - if output starts with os.sep, it's is considered full path
         - otherwise output  is considered a filename root
     """
-
     def _make_name(name, ext):
         return '.'.join((os.path.splitext(name)[0], ext))
 
+    root, current_ext = os.path.splitext(source)
+
     head, tail = os.path.split(source)
+    if current_ext.lower() == '.zip':
+        if not output:
+            return head
+        elif output.startswith(os.sep):
+            if os.path.isdir(output):
+                return output
+            else:
+                raise TargetDirectoryDoesNotExistError("Output dir '%s' does not exist" % output)
+        else:
+            target = os.path.join(head, output)
+            if os.path.isdir(target):
+                return target
+            else:
+                raise TargetDirectoryDoesNotExistError("Output dir '%s' does not exist" % target)
 
     new_name = _make_name(tail, ext)
     if output:
