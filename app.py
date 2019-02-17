@@ -194,9 +194,7 @@ class App:
         variable.set(default)
         Label(frame, text=label).pack(side=LEFT)
         for text, mode in available_formats:
-            # TODO: can this become Radiobutton(...).pack()??
-            select_format = Radiobutton(frame, text=text, variable=variable, value=mode)
-            select_format.pack(side=LEFT)
+            Radiobutton(frame, text=text, variable=variable, value=mode).pack(side=LEFT)
 
     def clean_frame(self, frame):
         for widget in frame.winfo_children():
