@@ -247,7 +247,7 @@ class App:
     def convert(self):
         """Trigger conversion of source(s) to desired target format."""
         logger.setLevel('INFO')
-        logger.setLevel('DEBUG')
+        # logger.setLevel('DEBUG')
         logger.info("starting conversion...")
 
         nb_idx = self.notebook.index(self.notebook.select())
