@@ -11,6 +11,17 @@
 	"folders":
 	[
 		{
+			"file_exclude_patterns":
+			[
+				"app.spec",
+				"todoist-converter-debug.spec",
+				"todoist-converter.spec"
+			],
+			"folder_exclude_patterns":
+			[
+				"todoist_converter.egg-info",
+				"build"
+			],
 			"path": "."
 		}
 	]
