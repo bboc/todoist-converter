@@ -65,6 +65,8 @@ class App:
     FILES_CONVERSION_TAB = 0
     DIRECTORY_CONVERSION_TAB = 1
 
+    TARGET_FORMAT_FRAME_LABEL = "Convert to:"
+
     def __init__(self, master):
 
         self.source_type = None
@@ -126,7 +128,7 @@ class App:
         self.format = StringVar()
         self.format_frame = Frame(frame)
         self.format_frame.pack(anchor=NW, padx=10, pady=10)
-        self._make_format_frame("Convert to:", self.format_frame, self.format, self.FMT_TASKPAPER[1], self.FROM_CSV)
+        self._make_format_frame(self.format_frame, self.TARGET_FORMAT_FRAME_LABEL, self.format, self.FMT_TASKPAPER[1], self.FROM_CSV)
 
         # download attachments
         self.download = IntVar()
@@ -158,7 +160,7 @@ class App:
 
         source_format_frame = Frame(frame)
         source_format_frame.pack(anchor=NW, padx=10, pady=10)
-        self._make_format_frame("Source format:", source_format_frame, self.dir_source_format, 'todoist', self.DIR_SOURCE_FORMATS)
+        self._make_format_frame(source_format_frame, "Source format:", self.dir_source_format, 'todoist', self.DIR_SOURCE_FORMATS)
         self.dir_source_format.trace("w", lambda name, index, mode, source_format=self.dir_source_format: self.cb_dir_source_format_changed(source_format))
 
         # init all variables for options before populating the frame
@@ -177,7 +179,7 @@ class App:
         # file format
         format_frame = Frame(frame)
         format_frame.pack(anchor=NW, padx=10, pady=10)
-        self._make_format_frame("Convert to:", format_frame, self.dir_target_format, self.FMT_TASKPAPER[1], self.FROM_CSV)
+        self._make_format_frame(format_frame, self.TARGET_FORMAT_FRAME_LABEL, self.dir_target_format, self.FMT_TASKPAPER[1], self.FROM_CSV)
 
         # download attachments
         download_frame = Frame(frame)
@@ -185,7 +187,7 @@ class App:
         checkbox_download = Checkbutton(download_frame, text="Download Attachments?", variable=self.dir_download_attachments)
         checkbox_download.pack(side=LEFT, padx=10, pady=10)
 
-    def _make_format_frame(self, label, frame, variable, default, available_formats):
+    def _make_format_frame(self, frame, label, variable, default, available_formats):
         """Set available output formats."""
         variable.set(default)
         Label(frame, text=label).pack(side=LEFT)
@@ -202,11 +204,12 @@ class App:
         """Determine what kind of source file is selected."""
 
         name = source.get()
+        logger.debug(name)
 
         def switch_format(source_type, default, available_formats):
             self.source_type = source_type
             self.clean_frame(self.format_frame)
-            self._make_format_frame(self.format_frame, self.format, default, available_formats)
+            self._make_format_frame(self.format_frame, self.TARGET_FORMAT_FRAME_LABEL, self.format, default, available_formats)
 
         if name.lower().endswith('csv'):
             switch_format(CSV, self.FMT_TASKPAPER[1], self.FROM_CSV)
@@ -250,13 +253,12 @@ class App:
 
         if nb_idx == self.FILES_CONVERSION_TAB:
             # set parameters for file conversion
-            # TODO: handle zip file here!!
             logger.debug("files tab")
             source = self.filename.get()
             target_format = self.format.get()
             logger.debug("target format: %s" % target_format)
             output = make_target_filename(source, self.output_file.get(), target_format)
-            download_attachments = self.download_attachments.get()
+            download_attachments = self.download.get()
             if os.path.splitext(source)[1].lower() == ".zip":
                 self.process_zip_file(source, target_format, output, download_attachments)
             self.tdconv(source, target_format, output, download_attachments)
