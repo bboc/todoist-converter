@@ -1,4 +1,14 @@
 # -*- coding: utf-8 -*-
+"""
+Tkinter wrapper for tdconv.
+
+Note: When building a native app with pyinstaller, the working directory of
+the app (and of tdconv) will be system root ("/"), which is NOT writable, at
+least on MacOS. When the app is invoked from the terminal via "open", or
+app.py is run with  "python app.py", the working directory is the shell's
+current directory.
+
+"""
 
 from __future__ import print_function
 from __future__ import unicode_literals
