@@ -76,8 +76,7 @@ class OpmlToCsvConverter(OpmlConverter):
                 self.process_element(outline)
 
     def _prepare_document(self):
-        # TODO: add zipfile support here
-        tree = ET.parse(self.source_name)
+        tree = ET.parse(self.source_file)
         opml = tree.getroot()
         return opml.find('body')
 
