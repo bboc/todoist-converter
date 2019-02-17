@@ -48,15 +48,33 @@ def convert(args):
             converter.convert()
 
 
-def process_zip(converter, args):
+def process_zip(converter_class, args):
     """convert all files in a zip file."""
-    source = args.file
-    with zipfile.ZipFile(source, 'r') as archive:
+    zip_path = args.file
+    source_directory = os.path.split(zip_path)[0]
+    print(source_directory)
+    print(zip_path)
+    target_extension = args.format
+    if target_extension == 'todoist':
+        target_extension == 'csv'
+    with zipfile.ZipFile(zip_path, 'r') as archive:
         for info in archive.infolist():
-            logger.debug(info.filename)
-            # TODO: limit processing to files that match selected source format!!
-            args.file = archive.open(info, 'r')
-            converter.convert()
+            if info.filename.lower().endswith('.csv'):
+                # limit processing to CSV-files
+                logger.debug(info.filename)
+                print(info.filename, repr(info))
+                target_filename = make_target_filename(source_directory, info.filename, target_extension)
+                print(target_filename)
+                source_file = archive.open(info, 'r')
+                converter = converter_class(args, source_file, target_filename)
+                converter.convert()
+
+
+def make_target_filename(directory, source_filename, target_extension):
+
+    src_name = os.path.split(source_filename)[1]
+    root = os.path.splitext(src_name)[0]
+    return os.path.join(directory, '.'.join((root, target_extension)))
 
 
 class TargetDirectoryDoesNotExistError(Exception):
