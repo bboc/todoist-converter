@@ -6,7 +6,7 @@ from __future__ import unicode_literals
 import argparse
 import logging
 from textwrap import dedent
-
+import os
 from markdown import CsvToMarkdownConverter
 from opml import OpmlToCsvConverter, CsvToOpmlConverter
 from taskpaper import CsvToTaskPaperConverter
@@ -40,6 +40,21 @@ def convert(args):
         logger.debug("set target name to '%s'" % args.output)
     conv.convert()
 
+
+class TargetDirectoryDoesNotExistError(Exception):
+    pass
+
+
+def determine_target_directory(source_dir, output):
+    if output:
+        if output.startswith(os.sep):
+            target = output
+        else:
+            target = os.path.join(source_dir, output)
+        if not os.path.isdir(target):
+            raise TargetDirectoryDoesNotExistError("Output dir '%s' does not exist" % target)
+        return target
+    return source_dir
 
 def main():
     parser = argparse.ArgumentParser(

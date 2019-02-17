@@ -36,10 +36,10 @@ from tkinter import (
     X, LEFT, RIGHT, BOTH, END,
 )
 from tkinter.scrolledtext import ScrolledText
-import ttk
 import traceback
+import ttk
 
-from tdconv.tdconv import convert
+from tdconv.tdconv import convert, determine_target_directory
 
 from setup import VERSION
 
@@ -237,7 +237,8 @@ class App:
                                                 title="Select file",
                                                 defaultextension='*.csv',
                                                 filetypes=(("Todoist Files", "*.csv"),
-                                                           ("OPML Files", "*.opml"),  # TODO: extend with ZIP
+                                                           ("OPML Files", "*.opml"),
+                                                           ("ZIP Files", "*.zip"),
                                                            ("all files", "*.*")))
         self.filename.set(filename)
 
@@ -261,8 +262,6 @@ class App:
             logger.debug("target format: %s" % target_format)
             output = make_target_filename(source, self.output_file.get(), target_format)
             download_attachments = self.download.get()
-            if os.path.splitext(source)[1].lower() == ".zip":
-                self.process_zip_file(source, target_format, output, download_attachments)
             self.tdconv(source, target_format, output, download_attachments)
         elif nb_idx == self.DIRECTORY_CONVERSION_TAB:
             logger.debug("directory tab")
@@ -275,10 +274,6 @@ class App:
             raise Exception("unknown tab %s" % nb_idx)
 
         logger.info("ready")
-
-    def process_zip_file(self, source, target_format, output, download_attachments):
-        """convert all files in a zip file."""
-        raise Exception("not implemented")
 
     def process_directory(self, source, source_filter, target_format, download_attachments):
         """Process all files in a directory that match source_filter"""
@@ -327,10 +322,6 @@ class App:
             logger.info("conversion finished")
 
 
-class TargetDirectoryDoesNotExistError(Exception):
-    pass
-
-
 def make_target_filename(source, output, ext):
     """Return target filename:
         - for source != zip or directory: target file is source file with new extension
@@ -340,27 +331,16 @@ def make_target_filename(source, output, ext):
     if ext == 'todoist':
         ext = 'csv'
 
-    def _make_target_directory(source_dir, output):
-        if output:
-            if output.startswith(os.sep):
-                target = output
-            else:
-                target = os.path.join(source_dir, output)
-            if not os.path.isdir(target):
-                raise TargetDirectoryDoesNotExistError("Output dir '%s' does not exist" % target)
-            return target
-        return source_dir
-
     if os.path.isdir(source):
         # source is a directory --> target needs to be a directory, too
-        return _make_target_directory(source, output)
+        return determine_target_directory(source, output)
     else:
         # source is a file
         root, source_ext = os.path.splitext(source)
         head, tail = os.path.split(source)
         if source_ext.lower() == '.zip':
             # source is a zipfile --> target needs to be a directory
-            return _make_target_directory(head, output)
+            return determine_target_directory(head, output)
         else:
             # source is a single file --> target is a file, too
             if output.startswith(os.sep):
