@@ -22,8 +22,8 @@ class CsvToOpmlConverter(OpmlConverter):
     OPML_IMAGE = Template('Image "$name": $url')
     EXT = 'opml'
 
-    def __init__(self, args):
-        super(CsvToOpmlConverter, self).__init__(args)
+    def __init__(self, cmd_args, *args, **kwargs):
+        super(CsvToOpmlConverter, self).__init__(cmd_args, *args, **kwargs)
 
     def convert(self):
         opml, self.parents = self._prepare_document()
@@ -64,8 +64,8 @@ class OpmlToCsvConverter(OpmlConverter):
     """Convert OPML file to Todoist CSV."""
     EXT = 'csv'
 
-    def __init__(self, args):
-        super(OpmlToCsvConverter, self).__init__(args)
+    def __init__(self, cmd_args, *args, **kwargs):
+        super(OpmlToCsvConverter, self).__init__(cmd_args, *args, **kwargs)
 
     def convert(self):
         document_body = self._prepare_document()
@@ -76,6 +76,7 @@ class OpmlToCsvConverter(OpmlConverter):
                 self.process_element(outline)
 
     def _prepare_document(self):
+        # TODO: add zipfile support here
         tree = ET.parse(self.source_name)
         opml = tree.getroot()
         return opml.find('body')

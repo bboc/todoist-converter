@@ -4,6 +4,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import argparse
+import codecs
 import logging
 from textwrap import dedent
 import zipfile
@@ -35,15 +36,16 @@ def convert(args):
     else:
         klass = CsvToMarkdownConverter
 
-    converter = klass(args)
-
     if os.path.splitext(args.file)[1].lower() == '.zip':
-        process_zip(converter, args)
+        process_zip(klass, args)
     else:
-        if args.output:
-            converter.target_name = args.output
-            logger.debug("set target name to '%s'" % args.output)
-        converter.convert()
+        with codecs.open(args.file, 'r') as source_file:
+            if args.output:
+                target = args.output
+            else:
+                target = ''
+            converter = klass(args, source_file, target)
+            converter.convert()
 
 
 def process_zip(converter, args):
@@ -52,6 +54,7 @@ def process_zip(converter, args):
     with zipfile.ZipFile(source, 'r') as archive:
         for info in archive.infolist():
             logger.debug(info.filename)
+            # TODO: limit processing to files that match selected source format!!
             args.file = archive.open(info, 'r')
             converter.convert()
 
