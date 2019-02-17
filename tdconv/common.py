@@ -72,11 +72,3 @@ class Downloadable(object):
     def __init__(self, args):
         super(Downloadable, self).__init__(args)
         self.download_attachments = args.download
-
-
-class ZipProcessor(object):
-
-    def convert(self):
-        if os.path.splitext(self.source_name)[1].lower() == '.zip':
-            with zipfile('spam.zip', 'w') as myzip:
-                print(repr(myzip.infolist()))
