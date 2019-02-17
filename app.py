@@ -14,6 +14,8 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 from argparse import Namespace
+import glob
+
 import logging
 import os
 import queue
@@ -59,6 +61,9 @@ class App:
     FROM_ZIP = (FMT_TASKPAPER, FMT_OPML, FMT_MD)
 
     DIR_SOURCE_FORMATS = (FMT_CSV, FMT_OPML)
+
+    FILES_CONVERSION_TAB = 0
+    DIRECTORY_CONVERSION_TAB = 1
 
     def __init__(self, master):
 
@@ -121,7 +126,7 @@ class App:
         self.format = StringVar()
         self.format_frame = Frame(frame)
         self.format_frame.pack(anchor=NW, padx=10, pady=10)
-        self._make_format_frame(self.format_frame, self.format, self.FMT_TASKPAPER[1], self.FROM_CSV)
+        self._make_format_frame("Convert to:", self.format_frame, self.format, self.FMT_TASKPAPER[1], self.FROM_CSV)
 
         # download attachments
         self.download = IntVar()
@@ -153,13 +158,13 @@ class App:
 
         source_format_frame = Frame(frame)
         source_format_frame.pack(anchor=NW, padx=10, pady=10)
-        self._make_format_frame(source_format_frame, self.dir_source_format, CSV, self.DIR_SOURCE_FORMATS)
+        self._make_format_frame("Source format:", source_format_frame, self.dir_source_format, 'todoist', self.DIR_SOURCE_FORMATS)
         self.dir_source_format.trace("w", lambda name, index, mode, source_format=self.dir_source_format: self.cb_dir_source_format_changed(source_format))
 
         # init all variables for options before populating the frame
         self.dir_target_format = StringVar()
         self.dir_download_attachments = IntVar()
-        self.dir_collect_to_one_file = IntVar()
+        self.dir_collect_to_one_file = IntVar()  # TODO: entry and processing still missing
 
         self.dir_options_frame = LabelFrame(frame, text="Format Options:", padx=5, pady=5)
         self.dir_options_frame.pack(anchor=NW, fill=X, padx=10, pady=10)
@@ -172,7 +177,7 @@ class App:
         # file format
         format_frame = Frame(frame)
         format_frame.pack(anchor=NW, padx=10, pady=10)
-        self._make_format_frame(format_frame, self.dir_target_format, self.FMT_TASKPAPER[1], self.FROM_CSV)
+        self._make_format_frame("Convert to:", format_frame, self.dir_target_format, self.FMT_TASKPAPER[1], self.FROM_CSV)
 
         # download attachments
         download_frame = Frame(frame)
@@ -180,10 +185,10 @@ class App:
         checkbox_download = Checkbutton(download_frame, text="Download Attachments?", variable=self.dir_download_attachments)
         checkbox_download.pack(side=LEFT, padx=10, pady=10)
 
-    def _make_format_frame(self, frame, variable, default, available_formats):
+    def _make_format_frame(self, label, frame, variable, default, available_formats):
         """Set available output formats."""
         variable.set(default)
-        Label(frame, text="Convert to: ").pack(side=LEFT)
+        Label(frame, text=label).pack(side=LEFT)
         for text, mode in available_formats:
             # TODO: can this become Radiobutton(...).pack()??
             select_format = Radiobutton(frame, text=text, variable=variable, value=mode)
@@ -236,45 +241,86 @@ class App:
         self.dirname.set(dirname)
 
     def convert(self):
-        # TODO: make options for directory conversion
-        # TODO: process zip conversion
+        """Trigger conversion of source(s) to desired target format."""
+        logger.setLevel('INFO')
+        logger.setLevel('DEBUG')
+        logger.info("starting conversion...")
 
         nb_idx = self.notebook.index(self.notebook.select())
 
-        if nb_idx == 0:
+        if nb_idx == self.FILES_CONVERSION_TAB:
+            # set parameters for file conversion
+            # TODO: handle zip file here!!
+            logger.debug("files tab")
             source = self.filename.get()
-        elif nb_idx == 1:
+            target_format = self.format.get()
+            logger.debug("target format: %s" % target_format)
+            output = make_target_filename(source, self.output_file.get(), target_format)
+            download_attachments = self.download_attachments.get()
+            if os.path.splitext(source)[1].lower() == ".zip":
+                self.process_zip_file(source, target_format, output, download_attachments)
+            self.tdconv(source, target_format, output, download_attachments)
+        elif nb_idx == self.DIRECTORY_CONVERSION_TAB:
+            logger.debug("directory tab")
             source = self.dirname.get()
-            
+            source_filter = self.dir_source_format.get()
+            target_format = self.dir_target_format.get()
+            download_attachments = self.dir_download_attachments.get()
+            self.process_directory(source, source_filter, target_format, download_attachments)
         else:
             raise Exception("unknown tab %s" % nb_idx)
 
-            if not source:
-                logger.error("No source file set!!")
-                return
-            elif not os.path.exists(source):
-                logger.error("source '%s' does not exist!" % source)
-                return
-            logger.setLevel('INFO')
-            logger.info("starting conversion...")
-            logger.info("source: %s" % source)
-            logger.info("target: %s" % self.output_file.get())
-            logger.info("format: %s" % self.format.get())
-            logger.info("download attachments: %s" % self.download.get())
-            logger.info("output folder: %s" % os.getcwd())
+        logger.info("ready")
 
-            args = Namespace(file=source,
-                             format=self.format.get(),
-                             output=self.output_file.get(),
-                             download=self.download.get())
+    def process_zip_file(self, source, target_format, output, download_attachments):
+        """convert all files in a zip file."""
+        raise Exception("not implemented")
+
+    def process_directory(self, source, source_filter, target_format, download_attachments):
+        """Process all files in a directory that match source_filter"""
+        if not os.path.isdir(source):
+            raise Exception("Source '%s' is not a directory" % source)
+
+        ext = source_filter
+        if source_filter == 'todoist':
+            ext = 'csv'
+        pattern = '*.%s' % ext
+        source_files = glob.glob(os.path.join(source, pattern))
+
+        if source_files:
+            for s in source_files:
+                o = make_target_filename(s, '', target_format)
+                self.tdconv(s, target_format, o, download_attachments)
+        else:
+            logger.error("No files matching pattern '%s' in directory '%s'" % (pattern, source))
+
+    def tdconv(self, source, target_format, output, download_attachments):
+        """Call tdconv to convert a file."""
+        # make sure source exists
+        if not source:
+            logger.error("No source file set!!")
+            return
+        elif not os.path.exists(source):
+            logger.error("source '%s' does not exist!" % source)
+            return
+        logger.info("source: %s" % source)
+        logger.info("target: %s" % output)
+        logger.info("format: %s" % target_format)
+        logger.info("download attachments: %s" % download_attachments)
+        logger.info("output folder: %s" % os.getcwd())
+
+        args = Namespace(file=source,
+                         format=target_format,
+                         output=output,
+                         download=download_attachments)
         try:
+            pass
             convert(args)
         except Exception:
             tb = traceback.format_exc()
             logger.error(tb)
         else:
             logger.info("conversion finished")
-        logger.info("ready")
 
 
 class TargetDirectoryDoesNotExistError(Exception):
@@ -287,6 +333,9 @@ def make_target_filename(source, output, ext):
         - if output starts with os.sep, it's is considered full path
         - otherwise output  is considered a filename root
     """
+    if ext == 'todoist':
+        ext = 'csv'
+
     def _make_target_directory(source_dir, output):
         if output:
             if output.startswith(os.sep):
