@@ -6,6 +6,7 @@ from __future__ import unicode_literals
 import argparse
 import logging
 from textwrap import dedent
+import zipfile
 import os
 from markdown import CsvToMarkdownConverter
 from opml import OpmlToCsvConverter, CsvToOpmlConverter
@@ -34,11 +35,25 @@ def convert(args):
     else:
         klass = CsvToMarkdownConverter
 
-    conv = klass(args)
-    if args.output:
-        conv.target_name = args.output
-        logger.debug("set target name to '%s'" % args.output)
-    conv.convert()
+    converter = klass(args)
+
+    if os.path.splitext(args.file)[1].lower() == '.zip':
+        process_zip(converter, args)
+    else:
+        if args.output:
+            converter.target_name = args.output
+            logger.debug("set target name to '%s'" % args.output)
+        converter.convert()
+
+
+def process_zip(converter, args):
+    """convert all files in a zip file."""
+    source = args.file
+    with zipfile.ZipFile(source, 'r') as archive:
+        for info in archive.infolist():
+            logger.debug(info.filename)
+            args.file = archive.open(info, 'r')
+            converter.convert()
 
 
 class TargetDirectoryDoesNotExistError(Exception):
@@ -55,6 +70,7 @@ def determine_target_directory(source_dir, output):
             raise TargetDirectoryDoesNotExistError("Output dir '%s' does not exist" % target)
         return target
     return source_dir
+
 
 def main():
     parser = argparse.ArgumentParser(
