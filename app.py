@@ -71,12 +71,12 @@ class App:
         # separator
         # Frame(height=2, bd=1, relief=SUNKEN).pack(fill=X, padx=5, pady=5)
 
-        notebook = ttk.Notebook(master)
-        file_frame = Frame(notebook)
-        directory_frame = Frame(notebook)
-        notebook.add(file_frame, text='Process File')
-        notebook.add(directory_frame, text='Process Directory')
-        notebook.pack(anchor=NW, padx=10, pady=10)
+        self.notebook = ttk.Notebook(master)
+        file_frame = Frame(self.notebook)
+        directory_frame = Frame(self.notebook)
+        self.notebook.add(file_frame, text='Process File')
+        self.notebook.add(directory_frame, text='Process Directory')
+        self.notebook.pack(anchor=NW, padx=10, pady=10)
         self.style_notebook()
 
         self.make_file_frame(file_frame)
@@ -238,25 +238,35 @@ class App:
     def convert(self):
         # TODO: make options for directory conversion
         # TODO: process zip conversion
-        source = self.filename.get()
-        if not source:
-            logger.error("No source file set!!")
-            return
-        elif not os.path.exists(source):
-            logger.error("source '%s' does not exist!" % source)
-            return
-        logger.setLevel('INFO')
-        logger.info("starting conversion...")
-        logger.info("source: %s" % source)
-        logger.info("target: %s" % self.output_file.get())
-        logger.info("format: %s" % self.format.get())
-        logger.info("download attachments: %s" % self.download.get())
-        logger.info("output folder: %s" % os.getcwd())
 
-        args = Namespace(file=source,
-                         format=self.format.get(),
-                         output=self.output_file.get(),
-                         download=self.download.get())
+        nb_idx = self.notebook.index(self.notebook.select())
+
+        if nb_idx == 0:
+            source = self.filename.get()
+        elif nb_idx == 1:
+            source = self.dirname.get()
+            
+        else:
+            raise Exception("unknown tab %s" % nb_idx)
+
+            if not source:
+                logger.error("No source file set!!")
+                return
+            elif not os.path.exists(source):
+                logger.error("source '%s' does not exist!" % source)
+                return
+            logger.setLevel('INFO')
+            logger.info("starting conversion...")
+            logger.info("source: %s" % source)
+            logger.info("target: %s" % self.output_file.get())
+            logger.info("format: %s" % self.format.get())
+            logger.info("download attachments: %s" % self.download.get())
+            logger.info("output folder: %s" % os.getcwd())
+
+            args = Namespace(file=source,
+                             format=self.format.get(),
+                             output=self.output_file.get(),
+                             download=self.download.get())
         try:
             convert(args)
         except Exception:
