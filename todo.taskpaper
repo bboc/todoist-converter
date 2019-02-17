@@ -4,7 +4,7 @@ todoist-converter:
 		- opml to csv does not write priority as int (empty string instead) @na
 	features:
 		- process an entire backup zip file @medium
-		- process folder @small
+		- process folder @small @done
 		- process one zip file or folder into one OPML file @medium
 		- convert opml to taskpaper and back (find out: what is a task, and what is an note, this should not be ambiguous, use taskpaper opml script, omnioutliner task paper export and carbon fin to test) @large
 	distribution:
@@ -15,8 +15,8 @@ todoist-converter:
 		Make GUI dynamic dependent on input (todoist CSV, Todoist Backup (ZIP), OPML, Directory): after file selection, change selection and enable/disable sections.
 			
 		- check if it's possible to get rid of some of the frames
-		- collect all info from dir tab and hand over to tdconv @na
-		- Add two tabs (one for folders, one for files), which also include the convert button, but NOT the output area.
+		- collect all info from dir tab and hand over to tdconv @na @done
+		- Add two tabs (one for folders, one for files), which also include the convert button, but NOT the output area. @done
 		- add separator or title to output area and make it extend with the window @done
 		Files Tab:
 			- File to Convert: ____________ @done
