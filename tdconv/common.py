@@ -5,15 +5,18 @@ from __future__ import unicode_literals
 
 import codecs
 from collections import namedtuple
+import logging
 import os.path
 import re
-import urllib2
 import zipfile
 
 from const import FIELDNAMES
 from unicode_csv import UnicodeReader
 
 from note import Note
+
+
+logger = logging.getLogger("tdconv")
 
 
 class Converter(object):
@@ -27,6 +30,7 @@ class Converter(object):
         self.Row = namedtuple('Row', ', '.join(FIELDNAMES).lower())
         self.source_name = args.file
         self.target_name = self.make_target_name(self.source_name)
+        logger.debug("set target name to '%s'" % self.target_name)
 
     @staticmethod
     def title(filename):

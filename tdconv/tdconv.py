@@ -4,11 +4,14 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import argparse
+import logging
 from textwrap import dedent
 
 from markdown import CsvToMarkdownConverter
 from opml import OpmlToCsvConverter, CsvToOpmlConverter
 from taskpaper import CsvToTaskPaperConverter
+
+logger = logging.getLogger("tdconv")
 
 FORMAT_MD = 'md'
 FORMAT_OPML = 'opml'
@@ -34,6 +37,7 @@ def convert(args):
     conv = klass(args)
     if args.output:
         conv.target_name = args.output
+        logger.debug("set target name to '%s'" % args.output)
     conv.convert()
 
 
