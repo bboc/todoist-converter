@@ -304,7 +304,6 @@ class App:
         logger.info("target: %s" % output)
         logger.info("format: %s" % target_format)
         logger.info("download attachments: %s" % download_attachments)
-        logger.info("output folder: %s" % os.getcwd())
 
         args = Namespace(file=source,
                          format=target_format,
