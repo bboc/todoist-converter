@@ -186,6 +186,15 @@ class App:
         logger.info("ready")
 
 
+def make_target_filename(source, output, ext):
+    """Return target filename:
+        - for source != zip or directory: target file is source file with new extension
+        - if output is set, and contains at least one path separator, output is considered full path
+        - if output does not contain a path separator, it is considered a filename root
+    """
+    pass
+
+
 class QueueHandler(logging.Handler):
     """Class to send logging records to a queue
 
