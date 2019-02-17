@@ -41,6 +41,8 @@ import traceback
 
 from tdconv.tdconv import convert
 
+from setup import VERSION
+
 logger = logging.getLogger("tdconv")
 
 
@@ -73,7 +75,7 @@ class App:
         self.build_gui(master)
 
     def build_gui(self, master):
-        master.title("todoist converter v0.4")
+        master.title("todoist converter v%s" % VERSION)
 
         # separator
         # Frame(height=2, bd=1, relief=SUNKEN).pack(fill=X, padx=5, pady=5)
